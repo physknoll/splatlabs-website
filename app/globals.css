@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   CSS CUSTOM PROPERTIES - LIGHT THEME
+   ============================================ */
+:root {
+  /* Brand Colors */
+  --rock-orange: #FF5F1F;
+  --rock-orange-rgb: 255, 95, 31;
+  
+  /* Light Theme Backgrounds */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #FAFAFA;
+  --bg-subtle: #F5F5F5;
+  --bg-muted: #F3F4F6;
+  
+  /* Light Theme Surfaces */
+  --surface: #FFFFFF;
+  --surface-raised: #FFFFFF;
+  
+  /* Light Theme Borders */
+  --border: #E5E7EB;
+  --border-strong: #D1D5DB;
+  
+  /* Light Theme Text */
+  --text-primary: #1a1a1a;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --text-dim: #9CA3AF;
+}
+
+/* ============================================
+   BASE LAYER OVERRIDES
+   ============================================ */
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-light-bg text-content-primary min-h-screen overflow-x-hidden;
+    font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-outfit), system-ui, sans-serif;
+    @apply font-bold leading-tight text-content-primary;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR - CLEAN LIGHT STYLE
+   ============================================ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAFAFA;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 5px;
+  border: 2px solid #FAFAFA;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5F1F;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D1D5DB #FAFAFA;
+}
+
+/* Selection */
+::selection {
+  background: rgba(255, 95, 31, 0.2);
+  color: #1a1a1a;
+}
+
+/* Focus Styles */
+:focus-visible {
+  @apply outline-2 outline-rock-orange outline-offset-2;
+}
+
+/* ============================================
+   COMPONENT LAYER - REUSABLE STYLES
+   ============================================ */
+@layer components {
+  /* Container */
+  .container-custom {
+    @apply w-full max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12;
+  }
+
+  /* Light Cards */
+  .card-light {
+    @apply bg-white border border-light-border rounded-2xl shadow-soft;
+  }
+
+  .card-light-hover:hover {
+    @apply shadow-soft-lg border-light-border-strong;
+  }
+
+  /* Subtle Surface */
+  .surface-subtle {
+    @apply bg-light-bg-subtle border border-light-border;
+  }
+
+  /* Feature Pills */
+  .feature-pill {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-light-bg-subtle border border-light-border rounded-full text-sm font-medium text-content-secondary;
+  }
+
+  .feature-pill:hover {
+    @apply bg-white border-light-border-strong shadow-soft;
+  }
+
+  /* Gradient Text - Orange */
+  .gradient-text-orange {
+    @apply bg-gradient-to-r from-rock-orange to-rock-orange-light bg-clip-text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Section Divider */
+  .section-divider {
+    @apply h-px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #E5E7EB 20%,
+      #E5E7EB 80%,
+      transparent
+    );
+  }
+
+  /* Hero Glow - Subtle for light theme */
+  .hero-glow {
+    @apply absolute pointer-events-none;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 95, 31, 0.08) 0%,
+      transparent 70%
+    );
+  }
+
+  /* Product Preview Frame */
+  .product-frame {
+    @apply relative bg-white rounded-2xl border border-light-border shadow-product overflow-hidden;
+  }
+
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ============================================
+   PROSE STYLES FOR BLOG CONTENT
+   ============================================ */
+.prose-light {
+  @apply text-content-secondary leading-relaxed;
+}
+
+.prose-light h1,
+.prose-light h2,
+.prose-light h3,
+.prose-light h4 {
+  @apply text-content-primary mt-8 mb-4;
+}
+
+.prose-light h1 { @apply text-4xl; }
+.prose-light h2 { @apply text-3xl; }
+.prose-light h3 { @apply text-2xl; }
+.prose-light p { @apply mb-6; }
+
+.prose-light a {
+  @apply text-rock-orange underline underline-offset-2;
+}
+
+.prose-light a:hover {
+  @apply text-rock-orange-light;
+}
+
+.prose-light ul,
+.prose-light ol {
+  @apply mb-6 pl-6;
+}
+
+.prose-light li {
+  @apply mb-2;
+}
+
+.prose-light code {
+  @apply bg-light-bg-subtle px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.prose-light pre {
+  @apply bg-light-bg-subtle p-6 rounded-xl overflow-x-auto mb-6 border border-light-border;
+}
+
+.prose-light pre code {
+  @apply bg-transparent p-0;
+}
+
+.prose-light blockquote {
+  @apply border-l-4 border-rock-orange pl-6 my-6 italic text-content-muted;
+}
+
+.prose-light img {
+  @apply rounded-xl my-8;
+}
+
+.prose-light hr {
+  @apply border-0 h-px bg-light-border my-12;
+}
+
+/* ============================================
+   SKELETON LOADING - LIGHT
+   ============================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #F3F4F6 25%,
+    #E5E7EB 50%,
+    #F3F4F6 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
