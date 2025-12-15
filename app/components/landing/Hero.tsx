@@ -137,20 +137,19 @@ export function Hero() {
               <br />
               <span className="relative inline-block">
                 <span className="gradient-text-orange">Built for Pros</span>
-                {/* Hand-drawn underline SVG */}
+                {/* Hand-drawn underline SVG - single gentle arch */}
                 <svg
-                  className="absolute -bottom-2 left-0 w-full h-4 overflow-visible"
-                  viewBox="0 0 300 12"
+                  className="absolute -bottom-1 left-0 w-full h-3 overflow-visible"
+                  viewBox="0 0 300 10"
                   preserveAspectRatio="none"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <motion.path
-                    d="M2 8 C 20 4, 40 10, 60 7 S 100 3, 120 8 S 160 12, 180 6 S 220 2, 240 7 S 280 10, 298 5"
+                    d="M2 8 Q 150 -2, 298 8"
                     stroke="url(#underline-gradient)"
                     strokeWidth="3"
                     strokeLinecap="round"
-                    strokeLinejoin="round"
                     fill="none"
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
@@ -169,7 +168,7 @@ export function Hero() {
                 </svg>
                 {/* Exclamation mark that pops after underline */}
                 <motion.span
-                  className="absolute -right-8 md:-right-10 lg:-right-12 top-0 text-rock-orange font-black"
+                  className="absolute -right-4 md:-right-5 lg:-right-6 top-0 gradient-text-orange font-black"
                   initial={{ opacity: 0, scale: 0, rotate: -20 }}
                   animate={{ opacity: 1, scale: 1, rotate: 0 }}
                   transition={{
