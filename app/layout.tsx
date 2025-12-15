@@ -27,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://splatlabs.rockrobotic.com'),
+  metadataBase: new URL('https://splatlabs.ai'),
   title: {
     default: 'Splat Labs | #1 Gaussian Splat Viewer & Cloud Hosting Platform',
     template: '%s | Splat Labs - Gaussian Splat Cloud',
@@ -86,37 +86,24 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://splatlabs.rockrobotic.com',
+    canonical: 'https://splatlabs.ai',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://splatlabs.rockrobotic.com',
+    url: 'https://splatlabs.ai',
     siteName: 'Splat Labs',
-    title: 'Splat Labs | #1 Gaussian Splat Viewer & Cloud Hosting',
+    title: 'Splat Labs | Gaussian Splat Hosting Built for Pros',
     description:
-      'Upload, view, and share Gaussian Splats in the cloud. The leading platform for 3DGS hosting with free online viewer, embeddable player, and collaboration tools.',
-    images: [
-      {
-        url: '/og/default.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Splat Labs - Host & Share Gaussian Splats in the Cloud',
-        type: 'image/jpeg',
-      },
-    ],
+      'Host. View. Measure. Share. Upload your splats and share interactive 3D experiences with anyone—no software required.',
   },
   twitter: {
     card: 'summary_large_image',
     site: '@rockrobotic',
     creator: '@rockrobotic',
-    title: 'Splat Labs | #1 Gaussian Splat Viewer & Cloud Hosting',
+    title: 'Splat Labs | Gaussian Splat Hosting Built for Pros',
     description:
-      'Upload, view, and share Gaussian Splats online. Free 3DGS viewer with cloud hosting and embeddable player.',
-    images: {
-      url: '/og/default.jpg',
-      alt: 'Splat Labs - Gaussian Splat Cloud Platform',
-    },
+      'Host. View. Measure. Share. Upload your splats and share interactive 3D experiences with anyone—no software required.',
   },
   icons: {
     icon: [
