@@ -17,7 +17,6 @@ const features = [
     ],
     video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     href: '/features/ai-staging',
-    align: 'left',
   },
   {
     title: '4D Timelines & Progress',
@@ -30,7 +29,6 @@ const features = [
     ],
     video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     href: '/features/4d-timelines',
-    align: 'right',
   },
   {
     title: 'Seamless Portals',
@@ -43,7 +41,6 @@ const features = [
     ],
     video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     href: '/features/portals',
-    align: 'left',
   },
   {
     title: 'Precision Measurements',
@@ -56,119 +53,163 @@ const features = [
     ],
     video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     href: '/features/measurements',
-    align: 'right',
   },
 ]
 
-interface FeatureBlockProps {
+interface FeatureCardProps {
   title: string
   description: string
   bullets: string[]
   video: string
   href: string
-  align: 'left' | 'right'
   index: number
 }
 
-function FeatureBlock({
+function FeatureCard({
   title,
   description,
   bullets,
   video,
   href,
-  align,
   index,
-}: FeatureBlockProps) {
-  const isEven = index % 2 === 0
+}: FeatureCardProps) {
+  const isReversed = index % 2 !== 0
   
   return (
-    <div className={`py-16 lg:py-24 ${isEven ? 'bg-white' : 'bg-light-bg-subtle'}`}>
-      <div className="container-custom">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, x: align === 'left' ? -50 : 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8 }}
-            className={align === 'right' ? 'lg:order-2' : ''}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="glass-card glass-card-glow p-6 md:p-8 lg:p-10"
+    >
+      <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isReversed ? 'lg:grid-flow-dense' : ''}`}>
+        {/* Text Content */}
+        <div className={isReversed ? 'lg:col-start-2' : ''}>
+          <span className="inline-block text-rock-orange text-xs font-semibold uppercase tracking-wider mb-3 px-3 py-1 rounded-full bg-rock-orange/10">
+            Feature {index + 1}
+          </span>
+          <h3 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-content-primary mb-4">
+            {title}
+          </h3>
+          <p className="text-base md:text-lg text-content-secondary leading-relaxed mb-6">
+            {description}
+          </p>
+
+          <ul className="space-y-3 mb-6">
+            {bullets.map((bullet) => (
+              <li key={bullet} className="flex items-start gap-3 text-content-secondary text-sm md:text-base">
+                <div className="w-5 h-5 rounded-full bg-rock-orange/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-rock-orange" />
+                </div>
+                {bullet}
+              </li>
+            ))}
+          </ul>
+
+          <Link
+            href={href}
+            className="inline-flex items-center gap-2 text-rock-orange font-semibold hover:gap-3 transition-all group text-sm md:text-base"
           >
-            <span className="text-rock-orange text-sm font-semibold uppercase tracking-wider">
-              Feature {index + 1}
-            </span>
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-content-primary mt-3 mb-6">
-              {title}
-            </h3>
-            <p className="text-lg text-content-secondary leading-relaxed mb-8">
-              {description}
-            </p>
+            Learn more
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
 
-            <ul className="space-y-4 mb-8">
-              {bullets.map((bullet) => (
-                <li key={bullet} className="flex items-center gap-3 text-content-secondary">
-                  <div className="w-1.5 h-1.5 rounded-full bg-rock-orange flex-shrink-0" />
-                  {bullet}
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              href={href}
-              className="inline-flex items-center gap-2 text-rock-orange font-semibold hover:gap-3 transition-all group"
-            >
-              Learn more
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </motion.div>
-
-          {/* Video */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8 }}
-            className={align === 'right' ? 'lg:order-1' : ''}
-          >
+        {/* Video */}
+        <div className={isReversed ? 'lg:col-start-1 lg:row-start-1' : ''}>
+          <div className="rounded-2xl overflow-hidden shadow-lg">
             <VideoPlaceholder
               youtubeUrl={video}
               className="relative"
             />
-          </motion.div>
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
 export function FeaturesShowcase() {
   return (
-    <section className="bg-light-bg-subtle relative">
-      {/* Section Header */}
-      <div className="container-custom pt-24 lg:pt-32">
+    <section className="relative overflow-hidden py-24 lg:py-32">
+      {/* Animated Background - matching hero aesthetic */}
+      <div className="absolute inset-0 bg-gradient-to-b from-light-bg-alt via-white to-light-bg-alt" />
+      
+      {/* Animated Gradient Blobs */}
+      <motion.div
+        animate={{
+          scale: [1, 1.15, 1],
+          x: [0, 40, 0],
+          y: [0, -30, 0],
+        }}
+        transition={{
+          duration: 22,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-rock-orange/10 via-amber-200/15 to-orange-100/5 blur-3xl pointer-events-none"
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1.1, 1],
+          x: [0, -30, 20, 0],
+          y: [0, 20, -20, 0],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: 3,
+        }}
+        className="absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-orange-200/15 via-rock-orange/8 to-amber-100/10 blur-3xl pointer-events-none"
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1.15, 1],
+          x: [0, 20, -30, 0],
+          y: [0, -20, 10, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: 8,
+        }}
+        className="absolute bottom-40 left-1/4 w-[450px] h-[450px] rounded-full bg-gradient-to-br from-amber-100/10 via-orange-100/8 to-rock-orange/5 blur-3xl pointer-events-none"
+      />
+
+      {/* Content */}
+      <div className="container-custom relative z-10">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="text-center mb-16 lg:mb-20"
         >
-          <span className="text-rock-orange text-sm font-semibold uppercase tracking-wider">
+          <span className="inline-block text-rock-orange text-sm font-semibold uppercase tracking-wider mb-4 px-4 py-1.5 rounded-full bg-rock-orange/10">
             Features
           </span>
-          <h2 className="text-4xl md:text-5xl font-heading font-bold text-content-primary mt-3">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-content-primary">
             More than just a viewer
           </h2>
+          <p className="mt-4 text-lg text-content-secondary max-w-2xl mx-auto">
+            Professional tools that transform how you work with Gaussian Splats
+          </p>
         </motion.div>
-      </div>
 
-      {/* Feature Blocks */}
-      {features.map((feature, i) => (
-        <FeatureBlock
-          key={feature.title}
-          {...feature}
-          align={feature.align as 'left' | 'right'}
-          index={i}
-        />
-      ))}
+        {/* Feature Cards */}
+        <div className="space-y-8 lg:space-y-12">
+          {features.map((feature, i) => (
+            <FeatureCard
+              key={feature.title}
+              {...feature}
+              index={i}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   )
 }

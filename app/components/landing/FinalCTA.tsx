@@ -65,11 +65,7 @@ export function FinalCTA() {
           >
             <span className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500" />
-              No credit card required
-            </span>
-            <span className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              Free plan forever
+              Start in minutes
             </span>
             <span className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500" />
