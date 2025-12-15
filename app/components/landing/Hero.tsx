@@ -1,14 +1,16 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Play, Upload, Users, Globe, Ruler } from 'lucide-react'
+import { ArrowRight, Play } from 'lucide-react'
 import { Button } from '../ui/Button'
 
-const featurePills = [
-  { icon: Upload, label: 'Instant Upload' },
-  { icon: Globe, label: 'Browser-Based' },
-  { icon: Users, label: 'Team Collaboration' },
-  { icon: Ruler, label: 'Precision Measurements' },
+// Splat creation tools - shows compatibility/source platforms
+const splatSourceTools = [
+  'Postshot',
+  'XGRIDS',
+  'Lichtfield',
+  'SHARE',
+  'KIRI',
 ]
 
 // Set to true once you add your video file
@@ -133,7 +135,7 @@ export function Hero() {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="font-heading font-black text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight text-content-primary mb-6 leading-[1.1]"
             >
-              Gaussian Splat Hosting,
+              Gaussian Splat Cloud,
               <br />
               <span className="relative inline-block">
                 <span className="gradient-text-orange">Built for Pros</span>
@@ -191,8 +193,8 @@ export function Hero() {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="max-w-lg text-lg md:text-xl text-content-secondary mb-8 leading-relaxed"
             >
-              <span className="font-semibold text-content-primary">Host. View. Measure. Share.</span>
-              {' '}Upload your splats and share interactive experiences with anyone—no software required.
+              <span className="font-semibold text-content-primary">Bring your splats.</span>
+              {' '}Host, view, measure, and share—we handle the rest. Create interactive walkthroughs and share with anyone, no software required.
             </motion.p>
 
             {/* CTAs */}
@@ -218,23 +220,23 @@ export function Hero() {
               </Button>
             </motion.div>
 
-            {/* Feature Pills */}
+            {/* Splat Source Tools - Compatibility Badges */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.8 }}
-              className="flex flex-wrap gap-3"
+              className="flex flex-wrap items-center gap-3"
             >
-              {featurePills.map((pill, i) => (
+              <span className="text-sm text-content-muted font-medium">Works with:</span>
+              {splatSourceTools.map((tool, i) => (
                 <motion.div
-                  key={pill.label}
+                  key={tool}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.8 + i * 0.1 }}
                   className="feature-pill"
                 >
-                  <pill.icon className="w-4 h-4 text-rock-orange" />
-                  <span>{pill.label}</span>
+                  <span>{tool}</span>
                 </motion.div>
               ))}
             </motion.div>
