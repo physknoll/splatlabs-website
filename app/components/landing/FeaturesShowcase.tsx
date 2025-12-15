@@ -39,8 +39,9 @@ const features = [
       'Indoor-outdoor linking',
       'Customizable waypoints',
     ],
-    video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    video: '/videos/rock-gaussian-splat-portals.mp4',
     href: '/features/portals',
+    isLocalVideo: true,
   },
   {
     title: 'Precision Measurements',
@@ -51,8 +52,22 @@ const features = [
       'Rich media annotations',
       'Saved measurement library',
     ],
-    video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    video: '/videos/rock-Gaussian-splat-measurements.mp4',
     href: '/features/measurements',
+    isLocalVideo: true,
+  },
+  {
+    title: 'Virtual Tours & Guided Walkthroughs',
+    description:
+      'Transform static scans into cinematic experiences. Create guided tours with annotations, auto-playing camera paths, and a filmstrip navigator that lets viewers explore at their own pace or sit back and watch.',
+    bullets: [
+      'Auto-animated camera paths between waypoints',
+      'Rich annotations with media embeds',
+      'Drag-and-drop tour ordering',
+    ],
+    video: '/videos/rock-splat-virtual-tour-walkthrough.mp4',
+    href: '/features/virtual-tours',
+    isLocalVideo: true,
   },
 ]
 
@@ -63,6 +78,7 @@ interface FeatureCardProps {
   video: string
   href: string
   index: number
+  isLocalVideo?: boolean
 }
 
 function FeatureCard({
@@ -72,6 +88,7 @@ function FeatureCard({
   video,
   href,
   index,
+  isLocalVideo,
 }: FeatureCardProps) {
   const isReversed = index % 2 !== 0
   
@@ -119,10 +136,25 @@ function FeatureCard({
         {/* Video */}
         <div className={isReversed ? 'lg:col-start-1 lg:row-start-1' : ''}>
           <div className="rounded-2xl overflow-hidden shadow-lg">
-            <VideoPlaceholder
-              youtubeUrl={video}
-              className="relative"
-            />
+            {isLocalVideo ? (
+              <div className="relative w-full pb-[56.25%] bg-light-bg-subtle">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute top-0 left-0 w-full h-full object-cover"
+                >
+                  <source src={video} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ) : (
+              <VideoPlaceholder
+                youtubeUrl={video}
+                className="relative"
+              />
+            )}
           </div>
         </div>
       </div>

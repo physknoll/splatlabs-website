@@ -1,0 +1,37 @@
+{
+  "name": "Splat Labs - Gaussian Splat Cloud Platform",
+  "short_name": "Splat Labs",
+  "description": "The #1 platform for hosting, viewing, and sharing Gaussian Splats in the cloud. Upload, collaborate, and embed 3DGS models anywhere.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF5F1F",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["graphics", "productivity", "utilities"],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
