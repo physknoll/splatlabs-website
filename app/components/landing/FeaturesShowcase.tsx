@@ -15,8 +15,9 @@ const features = [
       'Multiple style variations per view',
       'Non-destructive overlays',
     ],
-    video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    video: '/videos/rock-gaussian-splat-AI-Virtual-staging.mp4',
     href: '/features/ai-staging',
+    isLocalVideo: true,
   },
   {
     title: '4D Timelines & Progress',
@@ -27,8 +28,9 @@ const features = [
       'Automatic scan alignment',
       'Progress comparison tools',
     ],
-    video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    video: '/videos/rock-gaussian-splat-over-time.mp4',
     href: '/features/4d-timelines',
+    isLocalVideo: true,
   },
   {
     title: 'Seamless Portals',
