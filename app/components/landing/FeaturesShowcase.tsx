@@ -7,6 +7,21 @@ import { VideoPlaceholder } from '../ui/VideoPlaceholder'
 
 const features = [
   {
+    title: 'Automatic Floor Plan Generator',
+    description:
+      "Transform your 3D scans into professional floor plans instantly. Our AI automatically generates accurate floor plans from your Gaussian Splats, then lets you stylize them with different visual themes, add descriptive labels, and create interactive mini-maps that show exactly where viewers are in the scene.",
+    bullets: [
+      'AI-powered floor plan generation from scans',
+      'Multiple stylization themes & visual options',
+      'Interactive mini-map for spatial orientation',
+      'Custom text labels & room annotations',
+      'Upload existing plans or download AI-generated ones',
+    ],
+    video: '/videos/SpotLabs-FloorPlan.mp4',
+    href: '/features/floor-plans',
+    isLocalVideo: true,
+  },
+  {
     title: 'AI-Powered Virtual Staging',
     description:
       "Stop imagining 'what if.' Use our Gemini-powered AI to modify your scenes with simple text prompts. Furnish empty homes, visualize renovations, or clear construction debris from your view—instantly, non-destructively, and photorealistically.",
@@ -69,6 +84,21 @@ const features = [
     ],
     video: '/videos/rock-splat-virtual-tour-walkthrough.mp4',
     href: '/features/virtual-tours',
+    isLocalVideo: true,
+  },
+  {
+    title: 'Cinematic Fly-Through Movies',
+    description:
+      "Turn your Gaussian Splats into stunning cinematic experiences. Create and save unlimited fly-through movies with precise waypoint control. Set your path, fine-tune the motion, and export professional-quality videos that bring your 3D captures to life.",
+    bullets: [
+      'Unlimited saved fly-through movies',
+      'Waypoint-based path creation',
+      'Advanced camera & motion controls',
+      'Professional video export options',
+      'Reusable movie templates',
+    ],
+    video: '/videos/SplatLabs-Fly-Through.mp4',
+    href: '/features/fly-through',
     isLocalVideo: true,
   },
 ]

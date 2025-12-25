@@ -16,7 +16,7 @@ const splatSourceTools = [
 // Set to true once you add your video file
 const HAS_VIDEO = true
 // Path to your video in the public folder
-const VIDEO_PATH = '/videos/splat-homepage.mp4'
+const VIDEO_PATH = '/videos/SpotLabs-homepag-video.mp4'
 
 // Floating particles configuration - evokes the Gaussian Splat point cloud theme
 const floatingParticles = [
