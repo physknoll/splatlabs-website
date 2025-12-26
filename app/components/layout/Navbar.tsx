@@ -122,15 +122,17 @@ export function Navbar() {
 
           {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center gap-4">
-            <Link
-              href="/login"
+            <a
+              href="https://cloud.rockrobotic.com/"
               className="text-sm font-medium text-content-secondary hover:text-content-primary transition-colors"
             >
               Log In
-            </Link>
-            <Button variant="primary" size="md" rightIcon={<ArrowRight className="w-4 h-4" />}>
-              Start for Free
-            </Button>
+            </a>
+            <a href="https://cloud.rockrobotic.com/">
+              <Button variant="primary" size="md" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                Start for Free
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -203,22 +205,24 @@ export function Navbar() {
 
                 {/* Mobile CTAs */}
                 <div className="mt-8 pt-8 border-t border-light-border space-y-4">
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    className="w-full"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Start for Free
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Log In
-                  </Button>
+                  <a href="https://cloud.rockrobotic.com/" onClick={() => setMobileMenuOpen(false)}>
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      className="w-full"
+                    >
+                      Start for Free
+                    </Button>
+                  </a>
+                  <a href="https://cloud.rockrobotic.com/" onClick={() => setMobileMenuOpen(false)}>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full"
+                    >
+                      Log In
+                    </Button>
+                  </a>
                 </div>
               </div>
             </motion.div>

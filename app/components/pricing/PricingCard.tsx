@@ -105,13 +105,15 @@ export function PricingCard({
       </ul>
 
       {/* CTA */}
-      <Button
-        variant={highlighted ? 'primary' : 'outline'}
-        size="lg"
-        className="w-full"
-      >
-        {cta}
-      </Button>
+      <a href="https://cloud.rockrobotic.com/" className="w-full">
+        <Button
+          variant={highlighted ? 'primary' : 'outline'}
+          size="lg"
+          className="w-full"
+        >
+          {cta}
+        </Button>
+      </a>
     </motion.div>
   )
 }

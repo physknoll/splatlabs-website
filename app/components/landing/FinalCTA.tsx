@@ -42,14 +42,16 @@ export function FinalCTA() {
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              variant="primary"
-              size="xl"
-              rightIcon={<ArrowRight className="w-5 h-5" />}
-              className="shadow-soft-lg"
-            >
-              Create Free Account
-            </Button>
+            <a href="https://cloud.rockrobotic.com/">
+              <Button
+                variant="primary"
+                size="xl"
+                rightIcon={<ArrowRight className="w-5 h-5" />}
+                className="shadow-soft-lg"
+              >
+                Create Free Account
+              </Button>
+            </a>
             <Button variant="outline" size="xl">
               Talk to Sales
             </Button>

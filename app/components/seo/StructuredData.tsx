@@ -193,7 +193,7 @@ const howToSchema = {
       '@type': 'HowToStep',
       position: 1,
       name: 'Create an account',
-      text: 'Sign up for a free Splat Labs account at splatlabs.rockrobotic.com',
+      text: 'Sign up for a free Splat Labs account at cloud.rockrobotic.com',
     },
     {
       '@type': 'HowToStep',

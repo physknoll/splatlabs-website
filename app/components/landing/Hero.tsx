@@ -204,13 +204,15 @@ export function Hero() {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="flex flex-col sm:flex-row items-start gap-4 mb-6"
             >
-              <Button
-                variant="primary"
-                size="xl"
-                rightIcon={<ArrowRight className="w-5 h-5" />}
-              >
-                Get Started Free
-              </Button>
+              <a href="https://cloud.rockrobotic.com/">
+                <Button
+                  variant="primary"
+                  size="xl"
+                  rightIcon={<ArrowRight className="w-5 h-5" />}
+                >
+                  Get Started Free
+                </Button>
+              </a>
               <Button
                 variant="outline"
                 size="xl"
