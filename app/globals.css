@@ -30,9 +30,9 @@
   --text-muted: #6B7280;
   --text-dim: #9CA3AF;
   
-  /* Viewport-responsive section padding */
-  --section-py: clamp(4rem, 8vh, 8rem);
-  --section-py-lg: clamp(5rem, 10vh, 12rem);
+  /* Viewport-responsive section padding - scales with vh but caps at reasonable values */
+  --section-py: clamp(3rem, 5vh, 5rem);
+  --section-py-lg: clamp(4rem, 6vh, 6rem);
 }
 
 /* ============================================

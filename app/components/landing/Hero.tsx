@@ -44,7 +44,7 @@ const floatingParticles = [
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen w-full flex items-center bg-hero-gradient overflow-hidden">
+    <section className="relative w-full bg-hero-gradient overflow-hidden">
       {/* Animated Gradient Blobs */}
       <motion.div
         animate={{
@@ -119,8 +119,8 @@ export function Hero() {
       {/* Noise Texture Overlay - subtle depth */}
       <div className="noise-overlay z-[2]" />
 
-      {/* Content - vertically centered with flexbox, navbar offset handled by section */}
-      <div className="container-custom relative z-10 py-[max(5rem,8vh)]">
+      {/* Content - navbar offset with top padding, bottom padding scales with viewport */}
+      <div className="container-custom relative z-10 pt-28 pb-16 lg:pt-32 lg:pb-20">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 3xl:gap-28 4xl:gap-36 items-center">
           {/* Left Column - Copy */}
           <motion.div
