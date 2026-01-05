@@ -100,9 +100,25 @@
    COMPONENT LAYER - REUSABLE STYLES
    ============================================ */
 @layer components {
-  /* Container */
+  /* Container - scales up for large screens */
   .container-custom {
     @apply w-full max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12;
+  }
+
+  @media (min-width: 1920px) {
+    .container-custom {
+      max-width: 1600px;
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .container-custom {
+      max-width: 1920px;
+      padding-left: 5rem;
+      padding-right: 5rem;
+    }
   }
 
   /* Light Cards */

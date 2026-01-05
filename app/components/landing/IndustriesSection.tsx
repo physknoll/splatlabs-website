@@ -76,30 +76,30 @@ function IndustryContent({
   industry: (typeof industries)[0]
 }) {
   return (
-    <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+    <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 3xl:gap-16 4xl:gap-20">
       {/* Info */}
       <div>
-        <h3 className="text-2xl md:text-3xl font-heading font-bold text-content-primary mb-4">
+        <h3 className="text-2xl md:text-3xl 3xl:text-4xl 4xl:text-5xl font-heading font-bold text-content-primary mb-4 3xl:mb-6">
           {industry.title}
         </h3>
-        <p className="text-content-secondary text-lg mb-6 leading-relaxed">
+        <p className="text-content-secondary text-lg 3xl:text-xl 4xl:text-2xl mb-6 3xl:mb-8 leading-relaxed">
           {industry.description}
         </p>
 
-        <ul className="space-y-3 mb-8">
+        <ul className="space-y-3 3xl:space-y-4 mb-8 3xl:mb-10">
           {industry.benefits.map((benefit) => (
             <li key={benefit} className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-rock-orange/10 border border-rock-orange/30 flex items-center justify-center flex-shrink-0">
-                <div className="w-1.5 h-1.5 rounded-full bg-rock-orange" />
+              <div className="w-5 h-5 3xl:w-6 3xl:h-6 rounded-full bg-rock-orange/10 border border-rock-orange/30 flex items-center justify-center flex-shrink-0">
+                <div className="w-1.5 h-1.5 3xl:w-2 3xl:h-2 rounded-full bg-rock-orange" />
               </div>
-              <span className="text-content-secondary">{benefit}</span>
+              <span className="text-content-secondary 3xl:text-lg 4xl:text-xl">{benefit}</span>
             </li>
           ))}
         </ul>
 
         <Link
           href={industry.href}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-rock-orange/10 text-rock-orange font-semibold rounded-full border border-rock-orange/20 hover:bg-rock-orange/20 transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 3xl:px-8 3xl:py-4 bg-rock-orange/10 text-rock-orange font-semibold 3xl:text-lg rounded-full border border-rock-orange/20 hover:bg-rock-orange/20 transition-colors"
         >
           Learn more about {industry.label}
         </Link>
@@ -124,7 +124,7 @@ export function IndustriesSection() {
   }))
 
   return (
-    <section className="py-24 lg:py-32 bg-white relative">
+    <section className="py-24 lg:py-32 3xl:py-40 4xl:py-48 bg-white relative">
       <div className="container-custom relative">
         <SectionHeader
           badge="Industries"

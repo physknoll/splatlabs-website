@@ -9,6 +9,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Custom breakpoints for large screens
+      screens: {
+        '3xl': '1920px',
+        '4xl': '2560px',
+      },
       colors: {
         // Primary accent - keep the orange for CTAs and highlights
         rock: {

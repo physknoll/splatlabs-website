@@ -8,30 +8,30 @@ export function Footer() {
   return (
     <footer className="bg-light-bg-subtle border-t border-light-border">
       {/* Main Footer Content */}
-      <div className="container-custom py-16 lg:py-20">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12">
+      <div className="container-custom py-16 lg:py-20 3xl:py-24 4xl:py-28">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12 3xl:gap-16">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-rock-orange rounded-lg flex items-center justify-center font-heading font-bold text-white text-xl">
+            <Link href="/" className="flex items-center gap-3 mb-6 3xl:mb-8">
+              <div className="w-10 h-10 3xl:w-12 3xl:h-12 bg-rock-orange rounded-lg flex items-center justify-center font-heading font-bold text-white text-xl 3xl:text-2xl">
                 S
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-heading font-bold text-content-primary">
+                <span className="text-lg 3xl:text-xl font-heading font-bold text-content-primary">
                   Splat Labs
                 </span>
-                <span className="text-xs font-medium text-content-muted -mt-1">
+                <span className="text-xs 3xl:text-sm font-medium text-content-muted -mt-1">
                   by ROCK
                 </span>
               </div>
             </Link>
-            <p className="text-content-secondary text-sm max-w-xs mb-6">
+            <p className="text-content-secondary text-sm 3xl:text-base max-w-xs 3xl:max-w-sm mb-6 3xl:mb-8">
               The cloud platform for hosting, sharing, and
               collaborating on Gaussian Splat models.
             </p>
 
             {/* Social Links */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 3xl:gap-5">
               <a
                 href={SITE_CONFIG.links.twitter}
                 target="_blank"
@@ -39,7 +39,7 @@ export function Footer() {
                 className="text-content-muted hover:text-rock-orange transition-colors"
                 aria-label="Twitter"
               >
-                <Twitter className="w-5 h-5" />
+                <Twitter className="w-5 h-5 3xl:w-6 3xl:h-6" />
               </a>
               <a
                 href={SITE_CONFIG.links.github}
@@ -48,7 +48,7 @@ export function Footer() {
                 className="text-content-muted hover:text-rock-orange transition-colors"
                 aria-label="GitHub"
               >
-                <Github className="w-5 h-5" />
+                <Github className="w-5 h-5 3xl:w-6 3xl:h-6" />
               </a>
               <a
                 href={SITE_CONFIG.links.linkedin}
@@ -57,7 +57,7 @@ export function Footer() {
                 className="text-content-muted hover:text-rock-orange transition-colors"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="w-5 h-5" />
+                <Linkedin className="w-5 h-5 3xl:w-6 3xl:h-6" />
               </a>
               <a
                 href={SITE_CONFIG.links.youtube}
@@ -66,22 +66,22 @@ export function Footer() {
                 className="text-content-muted hover:text-rock-orange transition-colors"
                 aria-label="YouTube"
               >
-                <Youtube className="w-5 h-5" />
+                <Youtube className="w-5 h-5 3xl:w-6 3xl:h-6" />
               </a>
             </div>
           </div>
 
           {/* Product Links */}
           <div>
-            <h3 className="text-sm font-semibold text-content-primary mb-4">
+            <h3 className="text-sm 3xl:text-base font-semibold text-content-primary mb-4 3xl:mb-5">
               Product
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 3xl:space-y-4">
               {FOOTER_LINKS.product.map((link) => (
                 <li key={link.title}>
                   <Link
                     href={link.href}
-                    className="text-sm text-content-secondary hover:text-rock-orange transition-colors"
+                    className="text-sm 3xl:text-base text-content-secondary hover:text-rock-orange transition-colors"
                   >
                     {link.title}
                   </Link>
@@ -92,15 +92,15 @@ export function Footer() {
 
           {/* Solutions Links */}
           <div>
-            <h3 className="text-sm font-semibold text-content-primary mb-4">
+            <h3 className="text-sm 3xl:text-base font-semibold text-content-primary mb-4 3xl:mb-5">
               Solutions
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 3xl:space-y-4">
               {FOOTER_LINKS.solutions.map((link) => (
                 <li key={link.title}>
                   <Link
                     href={link.href}
-                    className="text-sm text-content-secondary hover:text-rock-orange transition-colors"
+                    className="text-sm 3xl:text-base text-content-secondary hover:text-rock-orange transition-colors"
                   >
                     {link.title}
                   </Link>
@@ -111,15 +111,15 @@ export function Footer() {
 
           {/* Resources Links */}
           <div>
-            <h3 className="text-sm font-semibold text-content-primary mb-4">
+            <h3 className="text-sm 3xl:text-base font-semibold text-content-primary mb-4 3xl:mb-5">
               Resources
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 3xl:space-y-4">
               {FOOTER_LINKS.resources.map((link) => (
                 <li key={link.title}>
                   <Link
                     href={link.href}
-                    className="text-sm text-content-secondary hover:text-rock-orange transition-colors"
+                    className="text-sm 3xl:text-base text-content-secondary hover:text-rock-orange transition-colors"
                   >
                     {link.title}
                   </Link>
@@ -130,15 +130,15 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h3 className="text-sm font-semibold text-content-primary mb-4">
+            <h3 className="text-sm 3xl:text-base font-semibold text-content-primary mb-4 3xl:mb-5">
               Company
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 3xl:space-y-4">
               {FOOTER_LINKS.company.map((link) => (
                 <li key={link.title}>
                   <Link
                     href={link.href}
-                    className="text-sm text-content-secondary hover:text-rock-orange transition-colors"
+                    className="text-sm 3xl:text-base text-content-secondary hover:text-rock-orange transition-colors"
                   >
                     {link.title}
                   </Link>
@@ -151,17 +151,17 @@ export function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-light-border">
-        <div className="container-custom py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-content-muted">
+        <div className="container-custom py-6 3xl:py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm 3xl:text-base text-content-muted">
             © {currentYear} ROCK Robotic. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 3xl:gap-8">
             {FOOTER_LINKS.legal.map((link) => (
               <Link
                 key={link.title}
                 href={link.href}
-                className="text-sm text-content-muted hover:text-content-primary transition-colors"
+                className="text-sm 3xl:text-base text-content-muted hover:text-content-primary transition-colors"
               >
                 {link.title}
               </Link>

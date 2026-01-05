@@ -57,7 +57,7 @@ export function Hero() {
           repeat: Infinity,
           ease: 'easeInOut',
         }}
-        className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-rock-orange/15 via-amber-200/20 to-orange-100/10 blur-3xl pointer-events-none"
+        className="absolute -top-40 -right-40 w-[600px] h-[600px] 3xl:w-[800px] 3xl:h-[800px] 4xl:w-[1000px] 4xl:h-[1000px] rounded-full bg-gradient-to-br from-rock-orange/15 via-amber-200/20 to-orange-100/10 blur-3xl pointer-events-none"
       />
       <motion.div
         animate={{
@@ -71,7 +71,7 @@ export function Hero() {
           ease: 'easeInOut',
           delay: 2,
         }}
-        className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-orange-200/20 via-rock-orange/10 to-amber-100/15 blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -left-32 w-[500px] h-[500px] 3xl:w-[700px] 3xl:h-[700px] 4xl:w-[900px] 4xl:h-[900px] rounded-full bg-gradient-to-tr from-orange-200/20 via-rock-orange/10 to-amber-100/15 blur-3xl pointer-events-none"
       />
       <motion.div
         animate={{
@@ -85,7 +85,7 @@ export function Hero() {
           ease: 'easeInOut',
           delay: 5,
         }}
-        className="absolute top-1/3 left-1/4 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-amber-100/15 via-orange-100/10 to-rock-orange/5 blur-3xl pointer-events-none"
+        className="absolute top-1/3 left-1/4 w-[400px] h-[400px] 3xl:w-[600px] 3xl:h-[600px] 4xl:w-[800px] 4xl:h-[800px] rounded-full bg-gradient-to-br from-amber-100/15 via-orange-100/10 to-rock-orange/5 blur-3xl pointer-events-none"
       />
 
       {/* Floating Particles Layer - Point Cloud Effect */}
@@ -120,8 +120,8 @@ export function Hero() {
       <div className="noise-overlay z-[2]" />
 
       {/* Content */}
-      <div className="container-custom relative z-10 pt-32 pb-20">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+      <div className="container-custom relative z-10 pt-32 pb-20 3xl:pt-40 3xl:pb-28 4xl:pt-48 4xl:pb-36">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 3xl:gap-28 4xl:gap-36 items-start">
           {/* Left Column - Copy */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -133,7 +133,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="font-heading font-black text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight text-content-primary mb-6 leading-[1.1]"
+              className="font-heading font-black text-4xl md:text-5xl lg:text-6xl xl:text-7xl 3xl:text-8xl 4xl:text-9xl tracking-tight text-content-primary mb-6 3xl:mb-8 4xl:mb-10 leading-[1.1]"
             >
               Gaussian Splat Cloud,
               <br />
@@ -170,7 +170,7 @@ export function Hero() {
                 </svg>
                 {/* Exclamation mark that pops after underline */}
                 <motion.span
-                  className="absolute -right-4 md:-right-5 lg:-right-6 top-0 gradient-text-orange font-black"
+                  className="absolute -right-4 md:-right-5 lg:-right-6 3xl:-right-8 4xl:-right-10 top-0 gradient-text-orange font-black"
                   initial={{ opacity: 0, scale: 0, rotate: -20 }}
                   animate={{ opacity: 1, scale: 1, rotate: 0 }}
                   transition={{
@@ -191,7 +191,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="max-w-lg text-lg md:text-xl text-content-secondary mb-8 leading-relaxed"
+              className="max-w-lg 3xl:max-w-xl 4xl:max-w-2xl text-lg md:text-xl 3xl:text-2xl 4xl:text-3xl text-content-secondary mb-8 3xl:mb-10 4xl:mb-12 leading-relaxed"
             >
               <span className="font-semibold text-content-primary">Bring your splats.</span>
               {' '}Host, view, measure, and share—we handle the rest. Create interactive walkthroughs and share with anyone, no software required.
@@ -202,7 +202,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
-              className="flex flex-col sm:flex-row items-start gap-4 mb-6"
+              className="flex flex-col sm:flex-row items-start gap-4 3xl:gap-6 mb-6 3xl:mb-8"
             >
               <a href="https://cloud.rockrobotic.com/">
                 <Button
@@ -227,9 +227,9 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.8 }}
-              className="flex flex-wrap items-center gap-3"
+              className="flex flex-wrap items-center gap-3 3xl:gap-4"
             >
-              <span className="text-sm text-content-muted font-medium">Works with:</span>
+              <span className="text-sm 3xl:text-base 4xl:text-lg text-content-muted font-medium">Works with:</span>
               {splatSourceTools.map((tool, i) => (
                 <motion.div
                   key={tool}
@@ -332,7 +332,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6 }}
-              className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-soft-lg border border-light-border p-4 hidden lg:block"
+              className="absolute -bottom-6 -left-6 3xl:-bottom-8 3xl:-left-8 bg-white rounded-xl 3xl:rounded-2xl shadow-soft-lg border border-light-border p-4 3xl:p-5 4xl:p-6 hidden lg:block"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
@@ -352,7 +352,7 @@ export function Hero() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.6 }}
-              className="absolute -top-4 -right-4 bg-white rounded-xl shadow-soft-lg border border-light-border p-4 hidden lg:block"
+              className="absolute -top-4 -right-4 3xl:-top-6 3xl:-right-6 bg-white rounded-xl 3xl:rounded-2xl shadow-soft-lg border border-light-border p-4 3xl:p-5 4xl:p-6 hidden lg:block"
             >
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2">

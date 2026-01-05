@@ -45,21 +45,21 @@ export function Navbar() {
         <div className="container-custom flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-rock-orange rounded-lg flex items-center justify-center font-heading font-bold text-white text-xl shadow-glow-sm group-hover:shadow-glow-md transition-shadow">
+            <div className="w-10 h-10 3xl:w-12 3xl:h-12 bg-rock-orange rounded-lg flex items-center justify-center font-heading font-bold text-white text-xl 3xl:text-2xl shadow-glow-sm group-hover:shadow-glow-md transition-shadow">
               S
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-heading font-bold text-content-primary group-hover:text-rock-orange transition-colors">
+              <span className="text-lg 3xl:text-xl font-heading font-bold text-content-primary group-hover:text-rock-orange transition-colors">
                 Splat Labs
               </span>
-              <span className="text-xs font-medium text-content-muted -mt-1">
+              <span className="text-xs 3xl:text-sm font-medium text-content-muted -mt-1">
                 by ROCK
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1 3xl:gap-2">
             {NAV_ITEMS.map((item) => (
               <div
                 key={item.title}
@@ -70,7 +70,7 @@ export function Navbar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    'flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors',
+                    'flex items-center gap-1 px-4 py-2 3xl:px-5 3xl:py-2.5 text-sm 3xl:text-base font-medium rounded-lg transition-colors',
                     'text-content-secondary hover:text-content-primary hover:bg-light-bg-subtle'
                   )}
                 >
@@ -121,15 +121,15 @@ export function Navbar() {
           </nav>
 
           {/* Desktop CTAs */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4 3xl:gap-6">
             <a
               href="https://cloud.rockrobotic.com/"
-              className="text-sm font-medium text-content-secondary hover:text-content-primary transition-colors"
+              className="text-sm 3xl:text-base font-medium text-content-secondary hover:text-content-primary transition-colors"
             >
               Log In
             </a>
             <a href="https://cloud.rockrobotic.com/">
-              <Button variant="primary" size="md" rightIcon={<ArrowRight className="w-4 h-4" />}>
+              <Button variant="primary" size="md" rightIcon={<ArrowRight className="w-4 h-4 3xl:w-5 3xl:h-5" />}>
                 Start for Free
               </Button>
             </a>
