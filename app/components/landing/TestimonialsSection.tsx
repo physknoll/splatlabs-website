@@ -8,7 +8,7 @@ import { TESTIMONIALS } from '@/lib/constants'
 
 export function TestimonialsSection() {
   return (
-    <section className="py-24 lg:py-32 3xl:py-40 4xl:py-48 bg-light-bg-subtle relative overflow-hidden">
+    <section className="section-padding bg-light-bg-subtle relative overflow-hidden">
       <div className="container-custom relative">
         <SectionHeader
           badge="Testimonials"

@@ -119,9 +119,9 @@ export function Hero() {
       {/* Noise Texture Overlay - subtle depth */}
       <div className="noise-overlay z-[2]" />
 
-      {/* Content */}
-      <div className="container-custom relative z-10 pt-32 pb-20 3xl:pt-40 3xl:pb-28 4xl:pt-48 4xl:pb-36">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 3xl:gap-28 4xl:gap-36 items-start">
+      {/* Content - vertically centered with flexbox, navbar offset handled by section */}
+      <div className="container-custom relative z-10 py-[max(5rem,8vh)]">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 3xl:gap-28 4xl:gap-36 items-center">
           {/* Left Column - Copy */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}

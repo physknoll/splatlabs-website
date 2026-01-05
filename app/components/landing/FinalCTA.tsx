@@ -6,7 +6,7 @@ import { Button } from '../ui/Button'
 
 export function FinalCTA() {
   return (
-    <section className="py-32 lg:py-40 3xl:py-48 4xl:py-56 bg-gradient-to-b from-light-bg-subtle to-white relative overflow-hidden">
+    <section className="section-padding bg-gradient-to-b from-light-bg-subtle to-white relative overflow-hidden">
       {/* Subtle Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] 3xl:w-[1100px] 3xl:h-[1100px] 4xl:w-[1400px] 4xl:h-[1400px] hero-glow opacity-40" />
 

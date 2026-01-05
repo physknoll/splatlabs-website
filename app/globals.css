@@ -29,6 +29,10 @@
   --text-secondary: #4B5563;
   --text-muted: #6B7280;
   --text-dim: #9CA3AF;
+  
+  /* Viewport-responsive section padding */
+  --section-py: clamp(4rem, 8vh, 8rem);
+  --section-py-lg: clamp(5rem, 10vh, 12rem);
 }
 
 /* ============================================
@@ -237,6 +241,19 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Viewport-responsive section padding */
+  .section-padding {
+    padding-top: var(--section-py);
+    padding-bottom: var(--section-py);
+  }
+
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding-top: var(--section-py-lg);
+      padding-bottom: var(--section-py-lg);
+    }
   }
 }
 

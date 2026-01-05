@@ -124,7 +124,7 @@ export function IndustriesSection() {
   }))
 
   return (
-    <section className="py-24 lg:py-32 3xl:py-40 4xl:py-48 bg-white relative">
+    <section className="section-padding bg-white relative">
       <div className="container-custom relative">
         <SectionHeader
           badge="Industries"

@@ -32,7 +32,7 @@ const values = [
 
 export function ValuePropositions() {
   return (
-    <section className="relative py-24 lg:py-32 3xl:py-40 4xl:py-48 overflow-hidden">
+    <section className="relative section-padding overflow-hidden">
       {/* Warm Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-orange-50/30 to-white" />
       

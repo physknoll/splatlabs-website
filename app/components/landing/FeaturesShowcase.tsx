@@ -196,7 +196,7 @@ function FeatureCard({
 
 export function FeaturesShowcase() {
   return (
-    <section className="relative overflow-hidden py-24 lg:py-32 3xl:py-40 4xl:py-48">
+    <section className="relative overflow-hidden section-padding">
       {/* Animated Background - matching hero aesthetic */}
       <div className="absolute inset-0 bg-gradient-to-b from-light-bg-alt via-white to-light-bg-alt" />
       
