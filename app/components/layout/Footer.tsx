@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Twitter, Github, Linkedin, Youtube } from 'lucide-react'
 import { FOOTER_LINKS, SITE_CONFIG } from '@/lib/constants'
 
@@ -13,9 +14,13 @@ export function Footer() {
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-6 3xl:mb-8">
-              <div className="w-10 h-10 3xl:w-12 3xl:h-12 bg-rock-orange rounded-lg flex items-center justify-center font-heading font-bold text-white text-xl 3xl:text-2xl">
-                S
-              </div>
+              <Image
+                src="/logo/SplatLabs_Logo.svg"
+                alt="Splat Labs Logo"
+                width={40}
+                height={40}
+                className="w-10 h-10 3xl:w-12 3xl:h-12 rounded-lg"
+              />
               <div className="flex flex-col">
                 <span className="text-lg 3xl:text-xl font-heading font-bold text-content-primary">
                   Splat Labs

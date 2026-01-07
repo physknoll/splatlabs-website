@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Menu, X, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -45,9 +46,14 @@ export function Navbar() {
         <div className="container-custom flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 3xl:w-12 3xl:h-12 bg-rock-orange rounded-lg flex items-center justify-center font-heading font-bold text-white text-xl 3xl:text-2xl shadow-glow-sm group-hover:shadow-glow-md transition-shadow">
-              S
-            </div>
+            <Image
+              src="/logo/SplatLabs_Logo.svg"
+              alt="Splat Labs Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10 3xl:w-12 3xl:h-12 rounded-lg shadow-glow-sm group-hover:shadow-glow-md transition-shadow"
+              priority
+            />
             <div className="flex flex-col">
               <span className="text-lg 3xl:text-xl font-heading font-bold text-content-primary group-hover:text-rock-orange transition-colors">
                 Splat Labs
