@@ -29,7 +29,7 @@ export default function PricingPage() {
 
         {/* Plan Description */}
         <p className="text-center text-content-muted mb-12">
-          Perfect for photogrammetry, 3D captures, and immersive experiences.
+          No confusing storage limits. Just count your active projects.
         </p>
 
         {/* Pricing Cards */}
