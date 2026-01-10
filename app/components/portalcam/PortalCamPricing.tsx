@@ -8,7 +8,7 @@ import { SectionHeader } from '../ui/SectionHeader'
 const packages = [
   {
     name: 'PortalCam Standard Package',
-    price: '$4,499',
+    price: '$4,999',
     priceNote: '*Price may vary by region',
     items: [
       'PortalCam x 1',
@@ -21,7 +21,7 @@ const packages = [
   },
   {
     name: 'PortalCam Premium Package',
-    price: '$6,399',
+    price: '$6,499',
     priceNote: '*Price may vary by region',
     items: [
       'PortalCam x 1',
