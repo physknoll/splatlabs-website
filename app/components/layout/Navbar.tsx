@@ -45,23 +45,12 @@ export function Navbar() {
       >
         <div className="container-custom flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <Image
-              src="/logo/SplatLabs_Logo.svg"
+          <Link href="/" className="flex items-center group">
+            <img
+              src="/logo/SVG/splatlabs_logo_full.svg"
               alt="Splat Labs Logo"
-              width={40}
-              height={40}
-              className="w-10 h-10 3xl:w-12 3xl:h-12 rounded-lg shadow-glow-sm group-hover:shadow-glow-md transition-shadow"
-              priority
+              className="h-9 3xl:h-11 w-auto"
             />
-            <div className="flex flex-col">
-              <span className="text-lg 3xl:text-xl font-heading font-bold text-content-primary group-hover:text-rock-orange transition-colors">
-                Splat Labs
-              </span>
-              <span className="text-xs 3xl:text-sm font-medium text-content-muted -mt-1">
-                by ROCK
-              </span>
-            </div>
           </Link>
 
           {/* Desktop Navigation */}
