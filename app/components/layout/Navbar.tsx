@@ -8,6 +8,7 @@ import { ChevronDown, Menu, X, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NAV_ITEMS } from '@/lib/constants'
 import { Button } from '../ui/Button'
+import { CartIcon } from '../store/CartIcon'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -117,6 +118,17 @@ export function Navbar() {
 
           {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center gap-4 3xl:gap-6">
+            {/* Store Link */}
+            <Link
+              href="/store"
+              className="text-sm 3xl:text-base font-medium text-content-secondary hover:text-content-primary transition-colors"
+            >
+              Store
+            </Link>
+            
+            {/* Cart Icon */}
+            <CartIcon />
+            
             <a
               href="https://cloud.rockrobotic.com/"
               className="text-sm 3xl:text-base font-medium text-content-secondary hover:text-content-primary transition-colors"
@@ -130,17 +142,21 @@ export function Navbar() {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-content-primary hover:bg-light-bg-subtle rounded-lg transition-colors"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
+          {/* Mobile Cart & Menu */}
+          <div className="lg:hidden flex items-center gap-2">
+            <CartIcon />
+            
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-content-primary hover:bg-light-bg-subtle rounded-lg transition-colors"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
       </header>
 

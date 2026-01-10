@@ -13,6 +13,19 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'img.youtube.com',
       },
+      // Ecwid product images CDN
+      {
+        protocol: 'https',
+        hostname: 'd2j6dbq0eux0bg.cloudfront.net',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.ecwid.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ecwid.com',
+      },
     ],
   },
 };

@@ -37,3 +37,6 @@ next-env.d.ts
 # IDE
 .idea
 .vscode
+
+# Ecwid custom theme (managed separately in Ecwid dashboard)
+ecwid-custom-theme.css

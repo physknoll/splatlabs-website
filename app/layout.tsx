@@ -4,6 +4,8 @@ import './globals.css'
 import { Navbar } from './components/layout/Navbar'
 import { Footer } from './components/layout/Footer'
 import { StructuredData } from './components/seo/StructuredData'
+import { CartSidebar } from './components/store/CartSidebar'
+import { Providers } from './components/Providers'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -143,10 +145,13 @@ export default function RootLayout({
       className={`${outfit.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-rock-dark text-rock-text antialiased">
-        <StructuredData />
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <Providers>
+          <StructuredData />
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <CartSidebar />
+        </Providers>
       </body>
     </html>
   )
