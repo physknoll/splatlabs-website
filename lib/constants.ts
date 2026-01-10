@@ -16,6 +16,7 @@ export const NAV_ITEMS = [
     title: 'Product',
     href: '/features',
     children: [
+      { title: 'PortalCam', href: '/products/portalcam', description: 'The first true spatial camera powered by 3D Gaussian Splatting' },
       { title: 'AI Virtual Staging', href: '/features/ai-staging', description: 'Transform spaces with AI-powered furniture and decor' },
       { title: '4D Timelines', href: '/features/4d-timelines', description: 'Track progress over time with temporal navigation' },
       { title: 'Portals', href: '/features/portals', description: 'Link multiple scenes seamlessly' },
