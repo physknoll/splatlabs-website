@@ -7,6 +7,7 @@ import { L2ProReliability } from '@/app/components/lixell2pro/L2ProReliability'
 import { L2ProWorkflow } from '@/app/components/lixell2pro/L2ProWorkflow'
 import { L2ProEcosystem } from '@/app/components/lixell2pro/L2ProEcosystem'
 import { L2ProCTA } from '@/app/components/lixell2pro/L2ProCTA'
+import { L2ProViewTracker } from '@/app/components/lixell2pro/L2ProViewTracker'
 
 export const metadata: Metadata = {
   title: 'Lixel L2 Pro | Real-Time Scanning & Modeling Device',
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
 export default function LixelL2ProPage() {
   return (
     <>
+      <L2ProViewTracker />
       <L2ProHero />
       <L2ProScrollSpinner />
       <L2ProColorComparison />

@@ -401,7 +401,7 @@ export const analytics = {
   },
 
   // ==========================================
-  // PORTALCAM PAGE EVENTS
+  // PRODUCT PAGE EVENTS
   // ==========================================
 
   /**
@@ -412,6 +412,19 @@ export const analytics = {
 
     posthog.capture('portalcam_viewed', {
       page: 'portalcam',
+      product: 'PortalCam',
+    })
+  },
+
+  /**
+   * Track Lixel L2 Pro page viewed
+   */
+  trackL2ProViewed: () => {
+    if (!isPostHogReady()) return
+
+    posthog.capture('l2pro_viewed', {
+      page: 'lixell2pro',
+      product: 'Lixel L2 Pro',
     })
   },
 
