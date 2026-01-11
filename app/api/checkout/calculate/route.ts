@@ -66,6 +66,12 @@ export async function POST(request: NextRequest) {
     }
     
     // Calculate order with Ecwid
+    console.log('Calculating order with:', {
+      itemCount: body.items.length,
+      email: body.email,
+      shippingTo: `${body.shippingAddress.city}, ${body.shippingAddress.stateOrProvinceCode} ${body.shippingAddress.postalCode} ${body.shippingAddress.countryCode}`,
+    })
+    
     const result = await calculateOrder({
       items: body.items,
       email: body.email,
@@ -73,6 +79,12 @@ export async function POST(request: NextRequest) {
       billingAddress: body.billingAddress,
       selectedShipping: body.selectedShipping,
       couponCode: body.couponCode,
+    })
+    
+    console.log('Ecwid returned:', {
+      shippingOptionsCount: result.availableShippingOptions?.length ?? 0,
+      selectedShipping: result.shippingOption?.shippingMethodName,
+      total: result.total,
     })
     
     // Return the full calculation result

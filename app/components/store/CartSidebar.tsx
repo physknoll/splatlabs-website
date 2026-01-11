@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingBag, ArrowRight, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -11,6 +12,7 @@ import { Button } from '../ui/Button'
 import { CartItem } from './CartItem'
 
 export function CartSidebar() {
+  const router = useRouter()
   const isHydrated = useCartHydration()
   const isOpen = useCartStore((state) => state.isOpen)
   const closeCart = useCartStore((state) => state.closeCart)
@@ -166,16 +168,18 @@ export function CartSidebar() {
                 </p>
                 
                 {/* Checkout Button */}
-                <Link href="/checkout" onClick={closeCart} className="block">
-                  <Button 
-                    variant="primary" 
-                    size="lg" 
-                    className="w-full"
-                    rightIcon={<ArrowRight className="w-5 h-5" />}
-                  >
-                    Proceed to Checkout
-                  </Button>
-                </Link>
+                <Button 
+                  variant="primary" 
+                  size="lg" 
+                  className="w-full"
+                  rightIcon={<ArrowRight className="w-5 h-5" />}
+                  onClick={() => {
+                    closeCart()
+                    router.push('/checkout')
+                  }}
+                >
+                  Proceed to Checkout
+                </Button>
                 
                 {/* Continue Shopping */}
                 <Link 

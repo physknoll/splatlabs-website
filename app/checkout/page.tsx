@@ -111,7 +111,8 @@ export default function CheckoutPage() {
       
       const data = await response.json()
       
-      setShippingOptions(data.availableShippingOptions || [])
+      const shippingOpts = data.availableShippingOptions || []
+      setShippingOptions(shippingOpts)
       setOrderTotals({
         subtotal: data.subtotal,
         shipping: data.shipping,
@@ -120,9 +121,25 @@ export default function CheckoutPage() {
         total: data.total,
       })
       
-      // Auto-select first shipping option if none selected
-      if (!selectedShipping && data.availableShippingOptions?.length > 0) {
-        setSelectedShipping(data.availableShippingOptions[0])
+      // Handle no shipping options case
+      if (shippingOpts.length === 0) {
+        console.warn('No shipping options returned from Ecwid')
+        setErrors({ general: 'No shipping options available for this address. Please check your address or try a different location.' })
+        return // Stay on address step
+      }
+      
+      // Auto-select first shipping option if none selected, or use pre-selected from Ecwid
+      if (!selectedShipping) {
+        // Prefer the one Ecwid pre-selected if available
+        const preSelected = data.selectedShipping
+        if (preSelected) {
+          const matchingOption = shippingOpts.find((opt: AvailableShippingOption) => 
+            opt.shippingMethodId === preSelected.shippingMethodId
+          )
+          setSelectedShipping(matchingOption || shippingOpts[0])
+        } else {
+          setSelectedShipping(shippingOpts[0])
+        }
       }
       
       setStep('shipping')
