@@ -159,7 +159,6 @@ export function PortalCamHero() {
             <div className="relative aspect-video bg-black">
               <video
                 autoPlay
-                loop
                 muted
                 playsInline
                 className="w-full h-full object-cover"
