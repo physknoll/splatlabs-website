@@ -13,6 +13,8 @@ interface OrderSummaryProps {
   discount?: number
   total: number
   isCalculating?: boolean
+  /** Whether shipping/tax has been calculated yet */
+  isCalculated?: boolean
   className?: string
 }
 
@@ -24,6 +26,7 @@ export function OrderSummary({
   discount = 0,
   total,
   isCalculating = false,
+  isCalculated = false,
   className,
 }: OrderSummaryProps) {
   return (
@@ -100,6 +103,8 @@ export function OrderSummary({
           <span className="text-content-secondary">Shipping</span>
           {isCalculating ? (
             <span className="text-content-muted">Calculating...</span>
+          ) : !isCalculated ? (
+            <span className="text-content-muted">— —</span>
           ) : shipping === 0 ? (
             <span className="text-green-600 font-medium">FREE</span>
           ) : (
@@ -112,6 +117,8 @@ export function OrderSummary({
           <span className="text-content-secondary">Tax</span>
           {isCalculating ? (
             <span className="text-content-muted">Calculating...</span>
+          ) : !isCalculated ? (
+            <span className="text-content-muted">— —</span>
           ) : (
             <span className="text-content-primary">{formatPrice(tax)}</span>
           )}
@@ -121,13 +128,22 @@ export function OrderSummary({
       {/* Total */}
       <div className="border-t border-light-border mt-4 pt-4">
         <div className="flex justify-between">
-          <span className="text-lg font-semibold text-content-primary">Total</span>
+          <span className="text-lg font-semibold text-content-primary">
+            {isCalculated ? 'Total' : 'Subtotal'}
+          </span>
           {isCalculating ? (
             <span className="text-lg font-bold text-content-muted">Calculating...</span>
+          ) : !isCalculated ? (
+            <span className="text-lg font-bold text-content-primary">{formatPrice(subtotal)}</span>
           ) : (
             <span className="text-lg font-bold text-rock-orange">{formatPrice(total)}</span>
           )}
         </div>
+        {!isCalculated && !isCalculating && (
+          <p className="text-xs text-content-muted mt-1">
+            Shipping & tax calculated at next step
+          </p>
+        )}
       </div>
     </div>
   )

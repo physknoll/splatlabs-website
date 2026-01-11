@@ -602,6 +602,7 @@ export default function CheckoutPage() {
                 discount={orderTotals.discount}
                 total={step === 'address' ? subtotal : orderTotals.total}
                 isCalculating={isCalculating}
+                isCalculated={step !== 'address'}
               />
               
               {/* Trust Badges */}
