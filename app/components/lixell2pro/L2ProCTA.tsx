@@ -105,7 +105,7 @@ export function L2ProCTA() {
                   variant="outline"
                   size="xl"
                   leftIcon={<MessageCircle className="w-5 h-5" />}
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="border-cyan-400/50 text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 hover:border-cyan-400"
                 >
                   Book a Demo
                 </Button>
