@@ -148,16 +148,16 @@ export function ScrollSpinner() {
       {/* Cinema Band Container */}
       <div ref={containerRef} className="h-[300vh] w-full relative">
         {/* Sticky Content */}
-        <div className="scroll-spinner-sticky sticky top-20 h-[calc(100vh-5rem)] w-full flex items-center overflow-hidden">
+        <div className="scroll-spinner-sticky sticky top-20 h-[calc(100vh-5rem)] w-full flex flex-col lg:flex-row items-center overflow-hidden">
           {/* Left Side - Header and Callouts */}
-          <div className="w-1/2 lg:w-2/5 h-full flex flex-col justify-center pl-8 pr-4 md:pl-16 md:pr-8 lg:pl-24 lg:pr-12">
+          <div className="w-full lg:w-2/5 flex flex-col justify-center px-6 pt-6 pb-4 md:px-12 lg:px-16 lg:py-0 lg:h-full">
             {/* Section Header */}
-            <div className="mb-10 lg:mb-12">
+            <div className="mb-4 lg:mb-10">
               <motion.span
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="inline-block text-rock-orange text-sm md:text-base font-semibold uppercase tracking-wider mb-3"
+                className="inline-block text-rock-orange text-xs md:text-sm lg:text-base font-semibold uppercase tracking-wider mb-2 lg:mb-3"
               >
                 Technical Breakdown
               </motion.span>
@@ -166,14 +166,14 @@ export function ScrollSpinner() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="font-heading font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white leading-tight"
+                className="font-heading font-bold text-2xl md:text-3xl lg:text-5xl xl:text-6xl text-white leading-tight"
               >
                 Engineered for Spatial Capture
               </motion.h2>
             </div>
 
             {/* Callouts */}
-            <div className="relative min-h-[160px] md:min-h-[180px]">
+            <div className="relative min-h-[120px] md:min-h-[140px] lg:min-h-[180px]">
               <AnimatePresence mode="wait">
                 {activeCallout && (
                   <motion.div
@@ -184,18 +184,18 @@ export function ScrollSpinner() {
                     transition={{ duration: 0.3 }}
                     className="max-w-md"
                   >
-                    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 md:p-8">
-                      <div className="flex items-center gap-4 mb-3">
-                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-rock-orange/20 flex items-center justify-center text-rock-orange">
-                          <div className="w-7 h-7 md:w-8 md:h-8">
+                    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl lg:rounded-2xl p-4 md:p-6 lg:p-8">
+                      <div className="flex items-center gap-3 lg:gap-4 mb-2 lg:mb-3">
+                        <div className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg lg:rounded-xl bg-rock-orange/20 flex items-center justify-center text-rock-orange">
+                          <div className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8">
                             {activeCallout.icon}
                           </div>
                         </div>
-                        <h3 className="font-semibold text-white text-xl md:text-2xl">
+                        <h3 className="font-semibold text-white text-lg md:text-xl lg:text-2xl">
                           {activeCallout.title}
                         </h3>
                       </div>
-                      <p className="text-white/70 text-base md:text-lg leading-relaxed">
+                      <p className="text-white/70 text-sm md:text-base lg:text-lg leading-relaxed">
                         {activeCallout.description}
                       </p>
                     </div>
@@ -204,8 +204,8 @@ export function ScrollSpinner() {
               </AnimatePresence>
             </div>
 
-            {/* Scroll Progress Indicator */}
-            <div className="mt-10 lg:mt-12 flex items-center gap-4 text-white/50 text-sm md:text-base">
+            {/* Scroll Progress Indicator - hidden on mobile */}
+            <div className="hidden lg:flex mt-10 lg:mt-12 items-center gap-4 text-white/50 text-sm md:text-base">
               <span>Scroll to explore</span>
               <div className="w-24 md:w-32 h-1.5 bg-white/20 rounded-full overflow-hidden">
                 <div
@@ -217,7 +217,7 @@ export function ScrollSpinner() {
           </div>
 
           {/* Right Side - Camera Canvas */}
-          <div className="w-1/2 lg:w-3/5 h-full flex items-center justify-center overflow-hidden">
+          <div className="w-full lg:w-3/5 flex-1 lg:h-full flex items-center justify-center overflow-hidden">
             {/* Loading State */}
             {!imagesLoaded && (
               <div className="absolute inset-0 flex items-center justify-center">
@@ -225,11 +225,11 @@ export function ScrollSpinner() {
               </div>
             )}
 
-            {/* Canvas - shifted left to center the camera (which is right-aligned in the source images) */}
+            {/* Canvas - centered on mobile, shifted on desktop */}
             <canvas
               ref={canvasRef}
-              className="h-[60vh] md:h-[65vh] lg:h-[70vh] w-auto object-contain 
-                         -translate-x-[15%] md:-translate-x-[20%] lg:-translate-x-[25%]"
+              className="h-[35vh] md:h-[45vh] lg:h-[70vh] w-auto object-contain 
+                         lg:-translate-x-[20%]"
               style={{ 
                 opacity: imagesLoaded ? 1 : 0,
               }}

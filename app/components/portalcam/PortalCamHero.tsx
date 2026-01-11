@@ -91,11 +91,9 @@ export function PortalCamHero() {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 mb-6"
           >
-            <img
-              src="/portalcam/images/portalcam_logo.png"
-              alt="PortalCam"
-              className="h-8 w-auto"
-            />
+            <span className="font-heading text-2xl md:text-3xl font-bold text-content-secondary/60 tracking-tight">
+              PortalCam
+            </span>
           </motion.div>
 
           {/* Headline */}
