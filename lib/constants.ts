@@ -17,6 +17,7 @@ export const NAV_ITEMS = [
     href: '/products/portalcam',
     children: [
       { title: 'PortalCam', href: '/products/portalcam', description: 'The first true spatial camera powered by 3D Gaussian Splatting' },
+      { title: 'Lixel L2 Pro', href: '/products/lixell2pro', description: 'Real-time scanning & modeling device with survey-grade accuracy' },
     ],
   },
   {
