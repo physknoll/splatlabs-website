@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { CheckCircle2, ArrowRight, Package, Mail } from 'lucide-react'
 import { Button } from '@/app/components/ui/Button'
+import { OrderCompletionTracker } from './OrderCompletionTracker'
 
 export const metadata: Metadata = {
   title: 'Order Confirmed | Thank You',
@@ -20,6 +21,9 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
   
   return (
     <main className="min-h-screen bg-white pt-24 pb-16">
+      {/* Analytics tracking */}
+      <OrderCompletionTracker orderId={order} status={status} />
+      
       <div className="container-custom">
         <div className="max-w-2xl mx-auto text-center py-12">
           {/* Success Icon */}

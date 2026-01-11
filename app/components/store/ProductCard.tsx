@@ -14,6 +14,7 @@ import {
   getStockStatus 
 } from '@/lib/ecwid/products'
 import { useCartStore } from '@/lib/stores/cart-store'
+import { analytics } from '@/lib/analytics'
 import { Button } from '../ui/Button'
 
 interface ProductCardProps {
@@ -30,6 +31,17 @@ export function ProductCard({ product, index = 0, className }: ProductCardProps)
   const onSale = isOnSale(product)
   const discountPercent = getDiscountPercentage(product)
   const stockStatus = getStockStatus(product)
+  
+  const handleProductClick = () => {
+    analytics.trackProductClicked({
+      product_id: product.id,
+      product_name: product.name,
+      product_sku: product.sku,
+      product_price: product.price,
+      product_url: `/store/${slug}`,
+      product_image_url: product.imageUrl,
+    }, index)
+  }
   
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -64,7 +76,7 @@ export function ProductCard({ product, index = 0, className }: ProductCardProps)
         className
       )}
     >
-      <Link href={`/store/${slug}`} className="block">
+      <Link href={`/store/${slug}`} className="block" onClick={handleProductClick}>
         {/* Image Container */}
         <div className="relative aspect-square bg-light-bg-subtle overflow-hidden">
           {product.imageUrl ? (

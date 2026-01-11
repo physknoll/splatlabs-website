@@ -3,6 +3,26 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { CartItem, SelectedOption } from '@/lib/ecwid/types'
+import { analytics, type CartItemProperties } from '@/lib/analytics'
+
+// ============================================
+// ANALYTICS HELPERS
+// ============================================
+
+/**
+ * Convert CartItem to CartItemProperties for analytics
+ */
+function toAnalyticsItem(item: CartItem): CartItemProperties {
+  return {
+    product_id: item.productId,
+    product_name: item.name,
+    product_sku: item.sku,
+    product_price: item.price,
+    quantity: item.quantity,
+    selected_options: item.selectedOptions,
+    combination_id: item.combinationId,
+  }
+}
 
 // ============================================
 // CART STORE TYPES
@@ -94,6 +114,10 @@ export const useCartStore = create<CartState>()(
       
       // Actions
       addItem: (item) => {
+        const currentItems = get().items
+        const isFirstItem = currentItems.length === 0
+        const analyticsItem = toAnalyticsItem(item)
+        
         set((state) => {
           const existingIndex = findItemIndex(state.items, item.productId, item.combinationId)
           
@@ -114,12 +138,32 @@ export const useCartStore = create<CartState>()(
           // New item or different options - add to cart
           return { items: [...state.items, item] }
         })
+        
+        // Track analytics after state update
+        const newItems = get().items.map(toAnalyticsItem)
+        
+        // Track cart created if this is the first item
+        if (isFirstItem) {
+          analytics.trackCartCreated(analyticsItem)
+        }
+        
+        // Always track add to cart
+        analytics.trackAddToCart(analyticsItem, newItems)
       },
       
       removeItem: (productId, combinationId) => {
+        const currentItems = get().items
+        const removedItem = currentItems.find(item => isSameItem(item, { productId, combinationId }))
+        
         set((state) => ({
           items: state.items.filter(item => !isSameItem(item, { productId, combinationId })),
         }))
+        
+        // Track analytics after state update
+        if (removedItem) {
+          const newItems = get().items.map(toAnalyticsItem)
+          analytics.trackRemoveFromCart(toAnalyticsItem(removedItem), newItems)
+        }
       },
       
       updateQuantity: (productId, quantity, combinationId) => {
@@ -138,7 +182,14 @@ export const useCartStore = create<CartState>()(
       },
       
       clearCart: () => {
+        const previousItems = get().items
+        
         set({ items: [] })
+        
+        // Track cart cleared
+        if (previousItems.length > 0) {
+          analytics.trackCartCleared(previousItems.map(toAnalyticsItem))
+        }
       },
       
       openCart: () => {

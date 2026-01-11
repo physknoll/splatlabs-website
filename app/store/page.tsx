@@ -3,6 +3,7 @@ import { getEnabledProducts, getEnabledCategories } from '@/lib/ecwid/products'
 import { SectionHeader } from '@/app/components/ui/SectionHeader'
 import { ProductCard } from '@/app/components/store/ProductCard'
 import { StoreFilters } from '@/app/components/store/StoreFilters'
+import { StoreViewTracker } from '@/app/components/store/StoreViewTracker'
 
 export const metadata: Metadata = {
   title: 'Store | Hardware & Accessories',
@@ -28,6 +29,12 @@ export default async function StorePage() {
   
   return (
     <main className="min-h-screen bg-white pt-24 pb-16">
+      {/* Analytics tracking */}
+      <StoreViewTracker 
+        productCount={products.length} 
+        categoryCount={categories.length} 
+      />
+      
       <div className="container-custom">
         {/* Header */}
         <SectionHeader

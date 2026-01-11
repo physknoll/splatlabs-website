@@ -1,14 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { SPLAT_PRICING_PLANS } from '@/lib/constants'
 import { SectionHeader } from '@/app/components/ui/SectionHeader'
 import { BillingToggle } from '@/app/components/pricing/BillingToggle'
 import { FullPricingCard } from '@/app/components/pricing/FullPricingCard'
 import { FeatureComparison } from '@/app/components/pricing/FeatureComparison'
+import { analytics } from '@/lib/analytics'
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly')
+  const hasTrackedView = useRef(false)
+  
+  // Track pricing page view
+  useEffect(() => {
+    if (!hasTrackedView.current) {
+      hasTrackedView.current = true
+      analytics.trackPricingViewed(billingPeriod)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  
+  // Handle billing period change with tracking
+  const handleBillingChange = (period: 'monthly' | 'yearly') => {
+    setBillingPeriod(period)
+    analytics.trackBillingToggleChanged(period)
+  }
 
   return (
     <main className="min-h-screen bg-white pt-24 pb-16">
@@ -23,7 +39,7 @@ export default function PricingPage() {
         {/* Billing Toggle */}
         <BillingToggle
           billingPeriod={billingPeriod}
-          onChange={setBillingPeriod}
+          onChange={handleBillingChange}
           className="mb-6"
         />
 

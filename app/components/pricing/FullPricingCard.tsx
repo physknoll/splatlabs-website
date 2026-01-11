@@ -6,6 +6,7 @@ import { Gift, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/Button'
 import { TierSlider } from './TierSlider'
+import { analytics } from '@/lib/analytics'
 import type { TieredPlan } from '@/lib/constants'
 
 interface FullPricingCardProps {
@@ -31,6 +32,35 @@ export function FullPricingCard({
     ? selectedTier.monthlyEquivalent || Math.round(selectedTier.yearly / 12)
     : null
   const isContactSales = selectedTier.contactSales
+  
+  // Handle tier change with analytics
+  const handleTierChange = (newIndex: number) => {
+    setSelectedTierIndex(newIndex)
+    const tier = plan.tiers[newIndex]
+    const tierPrice = isYearly ? tier.yearly : tier.monthly
+    const projectsStr = String(tier.projects)
+    
+    analytics.trackPricingTierChanged({
+      plan_name: plan.name,
+      tier_index: newIndex,
+      tier_projects: parseInt(projectsStr.replace(/\D/g, '')) || 0,
+      price: tierPrice,
+      billing_period: billingPeriod,
+    })
+  }
+  
+  // Handle CTA click with analytics
+  const handleCTAClick = () => {
+    const projectsStr = String(selectedTier.projects)
+    
+    analytics.trackPlanSelected({
+      plan_name: plan.name,
+      tier_index: selectedTierIndex,
+      tier_projects: parseInt(projectsStr.replace(/\D/g, '')) || 0,
+      price,
+      billing_period: billingPeriod,
+    })
+  }
 
   return (
     <motion.div
@@ -91,7 +121,7 @@ export function FullPricingCard({
         <TierSlider
           tiers={plan.tiers}
           selectedIndex={selectedTierIndex}
-          onChange={setSelectedTierIndex}
+          onChange={handleTierChange}
           label="Active Projects"
         />
       </div>
@@ -108,7 +138,11 @@ export function FullPricingCard({
 
       {/* CTA Button */}
       <div className="mb-6">
-        <a href="https://cloud.rockrobotic.com/" className="w-full block">
+        <a 
+          href="https://cloud.rockrobotic.com/" 
+          className="w-full block"
+          onClick={handleCTAClick}
+        >
           <Button
             variant={plan.highlighted ? 'primary' : 'outline'}
             size="lg"

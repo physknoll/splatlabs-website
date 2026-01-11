@@ -17,6 +17,7 @@ interface TabsProps {
   className?: string
   tabsClassName?: string
   contentClassName?: string
+  onTabChange?: (tabId: string, tabIndex: number) => void
 }
 
 export function Tabs({
@@ -25,8 +26,15 @@ export function Tabs({
   className,
   tabsClassName,
   contentClassName,
+  onTabChange,
 }: TabsProps) {
   const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id)
+  
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId)
+    const tabIndex = tabs.findIndex(t => t.id === tabId)
+    onTabChange?.(tabId, tabIndex)
+  }
 
   return (
     <div className={cn('', className)}>
@@ -40,7 +48,7 @@ export function Tabs({
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleTabChange(tab.id)}
             className={cn(
               'relative px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2',
               activeTab === tab.id

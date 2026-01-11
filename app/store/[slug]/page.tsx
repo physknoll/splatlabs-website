@@ -13,6 +13,7 @@ import {
 import { ProductGallery } from '@/app/components/store/ProductGallery'
 import { ProductDetails } from '@/app/components/store/ProductDetails'
 import { ProductCard } from '@/app/components/store/ProductCard'
+import { ProductViewTracker } from '@/app/components/store/ProductViewTracker'
 import type { EcwidProduct } from '@/lib/ecwid/types'
 
 // Enable ISR with 60 second revalidation
@@ -97,6 +98,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
   
   return (
     <main className="min-h-screen bg-white pt-24 pb-16">
+      {/* Analytics tracking */}
+      <ProductViewTracker
+        productId={product.id}
+        productName={product.name}
+        productSku={product.sku}
+        productPrice={product.price}
+        productImageUrl={product.imageUrl}
+      />
+      
       <div className="container-custom">
         {/* Breadcrumb */}
         <nav className="mb-8">

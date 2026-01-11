@@ -1,6 +1,7 @@
 'use client'
 
 import { ToastProvider } from './ui/Toast'
+import { PostHogProvider } from './PostHogProvider'
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -8,8 +9,10 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ToastProvider>
-      {children}
-    </ToastProvider>
+    <PostHogProvider>
+      <ToastProvider>
+        {children}
+      </ToastProvider>
+    </PostHogProvider>
   )
 }

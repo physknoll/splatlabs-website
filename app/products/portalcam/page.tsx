@@ -7,6 +7,7 @@ import { UseCasesGrid } from '@/app/components/portalcam/UseCasesGrid'
 import { ToolkitSection } from '@/app/components/portalcam/ToolkitSection'
 import { PortalCamPricing } from '@/app/components/portalcam/PortalCamPricing'
 import { PortalCamCTA } from '@/app/components/portalcam/PortalCamCTA'
+import { PortalCamViewTracker } from '@/app/components/portalcam/PortalCamViewTracker'
 
 export const metadata: Metadata = {
   title: 'PortalCam | The First True Spatial Camera',
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
 export default function PortalCamPage() {
   return (
     <>
+      <PortalCamViewTracker />
       <PortalCamHero />
       <WhatIsSection />
       <ScrollSpinner />

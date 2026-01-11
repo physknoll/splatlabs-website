@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -12,6 +12,7 @@ import { Button } from '@/app/components/ui/Button'
 import { AddressForm } from '@/app/components/checkout/AddressForm'
 import { ShippingSelector } from '@/app/components/checkout/ShippingSelector'
 import { OrderSummary } from '@/app/components/checkout/OrderSummary'
+import { analytics } from '@/lib/analytics'
 import type { ShippingPerson, AvailableShippingOption } from '@/lib/ecwid/types'
 
 export default function CheckoutPage() {
@@ -62,6 +63,50 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [step, setStep] = useState<'address' | 'shipping' | 'review'>('address')
+  
+  // Analytics tracking refs
+  const hasTrackedCheckoutStart = useRef(false)
+  const orderSubmittedRef = useRef(false)
+  
+  // Track checkout started
+  useEffect(() => {
+    if (isHydrated && items.length > 0 && !hasTrackedCheckoutStart.current) {
+      hasTrackedCheckoutStart.current = true
+      analytics.trackCheckoutStarted(items.map(item => ({
+        product_id: item.productId,
+        product_name: item.name,
+        product_sku: item.sku,
+        product_price: item.price,
+        quantity: item.quantity,
+        selected_options: item.selectedOptions,
+        combination_id: item.combinationId,
+      })))
+    }
+  }, [isHydrated, items])
+  
+  // Track cart abandonment on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Only track abandonment if checkout was started and order not submitted
+      if (hasTrackedCheckoutStart.current && !orderSubmittedRef.current && items.length > 0) {
+        analytics.trackCartAbandoned(
+          items.map(item => ({
+            product_id: item.productId,
+            product_name: item.name,
+            product_sku: item.sku,
+            product_price: item.price,
+            quantity: item.quantity,
+            selected_options: item.selectedOptions,
+            combination_id: item.combinationId,
+          })),
+          step
+        )
+      }
+    }
+    
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [items, step])
   
   // Validate address
   const validateAddress = useCallback(() => {
@@ -143,13 +188,19 @@ export default function CheckoutPage() {
       }
       
       setStep('shipping')
+      
+      // Track address step completion
+      analytics.trackCheckoutStep('address', {
+        has_billing_address: useDifferentBilling,
+        country: shippingAddress.countryCode,
+      })
     } catch (error) {
       console.error('Error calculating order:', error)
       setErrors({ general: 'Failed to calculate shipping. Please try again.' })
     } finally {
       setIsCalculating(false)
     }
-  }, [items, email, shippingAddress, selectedShipping, validateAddress])
+  }, [items, email, shippingAddress, selectedShipping, validateAddress, useDifferentBilling])
   
   // Re-calculate when shipping option changes
   useEffect(() => {
@@ -225,6 +276,15 @@ export default function CheckoutPage() {
       }
       
       const data = await response.json()
+      
+      // Mark order as submitted to prevent abandonment tracking
+      orderSubmittedRef.current = true
+      
+      // Track payment step
+      analytics.trackCheckoutStep('payment', {
+        order_total: orderTotals.total,
+        shipping_method: selectedShipping?.shippingMethodName,
+      })
       
       // Clear cart
       clearCart()
@@ -502,7 +562,14 @@ export default function CheckoutPage() {
                     </Button>
                     <Button
                       variant="primary"
-                      onClick={() => setStep('review')}
+                      onClick={() => {
+                        // Track shipping step completion
+                        analytics.trackCheckoutStep('shipping', {
+                          shipping_method: selectedShipping.shippingMethodName,
+                          shipping_rate: selectedShipping.shippingRate,
+                        })
+                        setStep('review')
+                      }}
                       rightIcon={<ArrowRight className="w-4 h-4" />}
                     >
                       Review Order

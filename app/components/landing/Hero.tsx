@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
 import { Button } from '../ui/Button'
+import { analytics } from '@/lib/analytics'
 
 // Splat creation tools - shows compatibility/source platforms
 const splatSourceTools = [
@@ -204,7 +205,17 @@ export function Hero() {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="flex flex-col sm:flex-row items-start gap-4 3xl:gap-6 mb-6 3xl:mb-8"
             >
-              <a href="https://cloud.rockrobotic.com/">
+              <a 
+                href="https://cloud.rockrobotic.com/"
+                onClick={() => {
+                  analytics.trackCTAClicked({
+                    button_name: 'get_started_free',
+                    button_text: 'Get Started Free',
+                    page_location: 'hero',
+                    destination_url: 'https://cloud.rockrobotic.com/',
+                  })
+                }}
+              >
                 <Button
                   variant="primary"
                   size="xl"
@@ -217,6 +228,14 @@ export function Hero() {
                 variant="outline"
                 size="xl"
                 leftIcon={<Play className="w-5 h-5" />}
+                onClick={() => {
+                  analytics.trackCTAClicked({
+                    button_name: 'book_demo',
+                    button_text: 'Book a Demo',
+                    page_location: 'hero',
+                  })
+                  analytics.trackDemoRequested('hero')
+                }}
               >
                 Book a Demo
               </Button>

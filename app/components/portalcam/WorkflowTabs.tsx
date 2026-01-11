@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Tabs } from '../ui/Tabs'
 import { Camera, Cloud, Layers } from 'lucide-react'
+import { analytics } from '@/lib/analytics'
 
 const workflowSteps = [
   {
@@ -107,6 +108,10 @@ export function WorkflowTabs() {
     icon: step.icon,
     content: <WorkflowContent step={step} />,
   }))
+  
+  const handleTabChange = (tabId: string, tabIndex: number) => {
+    analytics.trackWorkflowTabChanged(tabId, tabIndex)
+  }
 
   return (
     <section className="section-padding bg-white relative overflow-hidden">
@@ -146,6 +151,7 @@ export function WorkflowTabs() {
             tabs={tabData}
             tabsClassName="justify-center max-w-md mx-auto"
             contentClassName="mt-12"
+            onTabChange={handleTabChange}
           />
         </motion.div>
       </div>
