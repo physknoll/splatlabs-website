@@ -134,20 +134,7 @@ export default function CheckoutPage() {
     setIsCalculating(true)
     
     try {
-      // Always send a selectedShipping - Ecwid only returns all shipping options
-      // when a selection is provided. On first call, we send a placeholder to get
-      // all available options. On subsequent calls, we send the actual selection.
-      const shippingToSend = selectedShipping 
-        ? {
-            shippingMethodId: selectedShipping.shippingMethodId,
-            shippingMethodName: selectedShipping.shippingMethodName,
-          }
-        : {
-            // Placeholder to force Ecwid to return all shipping options
-            shippingMethodId: 'CALCULATE_ALL',
-            shippingMethodName: 'Calculate All Options',
-          }
-      
+      // First API call - may only return the "default" shipping option
       const response = await fetch('/api/checkout/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -156,7 +143,10 @@ export default function CheckoutPage() {
           email,
           shippingAddress,
           billingAddress: useDifferentBilling ? billingAddress : undefined,
-          selectedShipping: shippingToSend,
+          selectedShipping: selectedShipping ? {
+            shippingMethodId: selectedShipping.shippingMethodId,
+            shippingMethodName: selectedShipping.shippingMethodName,
+          } : undefined,
           couponCode: couponCode || undefined,
         }),
       })
@@ -165,20 +155,50 @@ export default function CheckoutPage() {
         throw new Error('Failed to calculate order')
       }
       
-      const data = await response.json()
-      
-      // Build the shipping options list
+      let data = await response.json()
       let shippingOpts: AvailableShippingOption[] = data.availableShippingOptions || []
       
-      // If Ecwid pre-selected a shipping option that's not in the list (like "Free Shipping"),
-      // add it to the front of the list so it's available for selection
+      // ECWID QUIRK: When no selectedShipping is sent, Ecwid only returns the "default" option.
+      // We need to make a second call WITH a selectedShipping to get ALL available options.
+      // This only happens on the first calculate (when selectedShipping is null).
+      if (!selectedShipping && data.selectedShipping && shippingOpts.length <= 1) {
+        console.log('Making second API call to get all shipping options...')
+        
+        const secondResponse = await fetch('/api/checkout/calculate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items,
+            email,
+            shippingAddress,
+            billingAddress: useDifferentBilling ? billingAddress : undefined,
+            selectedShipping: {
+              shippingMethodId: data.selectedShipping.shippingMethodId || 'default',
+              shippingMethodName: data.selectedShipping.shippingMethodName,
+            },
+            couponCode: couponCode || undefined,
+          }),
+        })
+        
+        if (secondResponse.ok) {
+          const secondData = await secondResponse.json()
+          // Use the second response which has all options
+          if (secondData.availableShippingOptions?.length > shippingOpts.length) {
+            data = secondData
+            shippingOpts = data.availableShippingOptions || []
+          }
+        }
+      }
+      
+      // If Ecwid pre-selected a shipping option that's not in the list,
+      // add it to the front so it's available for selection
       const preSelected = data.selectedShipping
-      if (preSelected && preSelected.shippingMethodId) {
+      if (preSelected && preSelected.shippingMethodName) {
         const existsInList = shippingOpts.some(
-          (opt) => opt.shippingMethodId === preSelected.shippingMethodId
+          (opt) => opt.shippingMethodId === preSelected.shippingMethodId ||
+                   opt.shippingMethodName === preSelected.shippingMethodName
         )
         if (!existsInList) {
-          // Add the pre-selected option to the front
           shippingOpts = [preSelected, ...shippingOpts]
         }
       }
@@ -190,7 +210,7 @@ export default function CheckoutPage() {
         return // Stay on address step
       }
       
-      // Update state atomically - set options first, then selection
+      // Update state
       setShippingOptions(shippingOpts)
       setOrderTotals({
         subtotal: data.subtotal,
@@ -200,16 +220,11 @@ export default function CheckoutPage() {
         total: data.total,
       })
       
-      // Auto-select shipping option
-      // If Ecwid pre-selected one, use it; otherwise use the first available
-      if (preSelected && preSelected.shippingMethodId) {
-        const matchingOption = shippingOpts.find(
-          (opt) => opt.shippingMethodId === preSelected.shippingMethodId
-        )
-        setSelectedShipping(matchingOption || shippingOpts[0])
-      } else {
-        setSelectedShipping(shippingOpts[0])
-      }
+      // Auto-select the first real carrier option (not "Free Shipping" if there are others)
+      const realCarrierOption = shippingOpts.find(opt => 
+        opt.shippingCarrierName && opt.shippingCarrierName !== 'Free Shipping'
+      )
+      setSelectedShipping(realCarrierOption || shippingOpts[0])
       
       setStep('shipping')
       
