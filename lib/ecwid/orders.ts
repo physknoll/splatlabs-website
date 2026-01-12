@@ -169,10 +169,42 @@ export async function createOrder(params: CreateOrderParams): Promise<{
   // Use public token for order creation (secret token returns 403)
   const response = await ecwidPost<CreateOrderResponse>('/orders', orderData, undefined, { usePublicToken: true })
 
-  // Build the payment URL
-  // Ecwid payment links follow this format:
+  // Get the store profile to find the correct storefront URL
   const storeId = getStoreId()
-  const paymentUrl = `https://app.ecwid.com/custompaymentapp/${storeId}/${response.id}/checkout`
+  let paymentUrl: string
+  
+  try {
+    // Get the store profile which contains the Instant Site URL
+    const profile = await ecwidGet<{
+      generalInfo?: {
+        storeUrl?: string
+        instantSiteUrl?: string
+      }
+      settings?: {
+        storefront?: {
+          storeUrl?: string
+        }
+      }
+    }>('/profile')
+    
+    // Use the store's Instant Site URL if available
+    const storeUrl = profile.generalInfo?.instantSiteUrl || 
+                     profile.generalInfo?.storeUrl ||
+                     profile.settings?.storefront?.storeUrl
+    
+    if (storeUrl) {
+      // Redirect to the store's checkout with this order
+      paymentUrl = `${storeUrl}/#!/~/checkout/order/${response.id}/pay`
+    } else {
+      // No Instant Site - use Ecwid's hosted order page
+      // This format works for viewing/paying orders
+      paymentUrl = `https://app.ecwid.com/orders/${storeId}/${response.id}`
+    }
+  } catch (error) {
+    console.error('Error fetching store profile:', error)
+    // Fallback to the standard Instant Site format
+    paymentUrl = `https://store${storeId}.company.site/#!/~/checkout/order/${response.id}/pay`
+  }
 
   return {
     orderId: response.id,
