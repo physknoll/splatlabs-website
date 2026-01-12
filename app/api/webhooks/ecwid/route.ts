@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     
     // Verify webhook signature if client secret is configured
     // Ecwid signs webhooks using your app's Client Secret
-    const clientSecret = process.env.ECWID_CLIENT_SECRET
+    const clientSecret = process.env.ECWID_CLIENT_SECRET || process.env.ECWID_WEBHOOK_SECRET
     if (clientSecret) {
       const signature = request.headers.get('x-ecwid-webhook-signature')
       

@@ -1,5 +1,5 @@
 // Ecwid API Client
-// Server-side only - uses secret token
+// Server-side only - uses secret token for reads, public token for writes
 
 const ECWID_API_BASE = 'https://app.ecwid.com/api/v3'
 
@@ -16,12 +16,26 @@ export function getStoreId(): string {
 
 /**
  * Get the Ecwid Secret Token from environment variables
- * This should ONLY be used server-side (API routes)
+ * Used for reading data (orders, products, profile)
  */
 export function getSecretToken(): string {
   const token = process.env.ECWID_SECRET_TOKEN
   if (!token) {
     throw new Error('ECWID_SECRET_TOKEN environment variable is not set')
+  }
+  return token
+}
+
+/**
+ * Get the Ecwid Public Token from environment variables
+ * Used for creating/updating orders (has create_orders scope)
+ */
+export function getPublicToken(): string {
+  const token = process.env.ECWID_PUBLIC_TOKEN
+  if (!token) {
+    // Fall back to secret token if public token not set
+    console.warn('ECWID_PUBLIC_TOKEN not set, falling back to secret token')
+    return getSecretToken()
   }
   return token
 }
@@ -76,18 +90,21 @@ export async function ecwidGet<T>(
 
 /**
  * Make an authenticated POST request to the Ecwid API
+ * Uses secret token by default
  */
 export async function ecwidPost<T, B = unknown>(
   endpoint: string,
   body: B,
-  params?: Record<string, string | number | boolean | undefined>
+  params?: Record<string, string | number | boolean | undefined>,
+  options?: { usePublicToken?: boolean }
 ): Promise<T> {
   const url = buildApiUrl(endpoint, params)
+  const token = options?.usePublicToken ? getPublicToken() : getSecretToken()
   
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${getSecretToken()}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),

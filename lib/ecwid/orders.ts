@@ -71,6 +71,7 @@ export async function calculateOrder(params: CalculateOrderParams): Promise<Orde
     }
   }
 
+  // Secret token works fine for order calculation
   return ecwidPost<OrderCalculateResponse>('/order/calculate', requestBody)
 }
 
@@ -162,7 +163,8 @@ export async function createOrder(params: CreateOrderParams): Promise<{
     }
   }
 
-  const response = await ecwidPost<CreateOrderResponse>('/orders', orderData)
+  // Use public token for order creation (secret token returns 403)
+  const response = await ecwidPost<CreateOrderResponse>('/orders', orderData, undefined, { usePublicToken: true })
 
   // Build the payment URL
   // Ecwid payment links follow this format:
