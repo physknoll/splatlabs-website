@@ -220,19 +220,32 @@ export default function CheckoutPage() {
       
       // Update state
       setShippingOptions(shippingOpts)
-      setOrderTotals({
+      
+      // Store base totals for local shipping recalculations
+      // (we don't include shipping here - it gets added based on selection)
+      baseTotalsRef.current = {
         subtotal: data.subtotal,
-        shipping: data.shipping,
         tax: data.tax,
         discount: data.discount + data.couponDiscount,
-        total: data.total,
-      })
+      }
       
       // Auto-select the first real carrier option (not "Free Shipping" if there are others)
       const realCarrierOption = shippingOpts.find(opt => 
         opt.shippingCarrierName && opt.shippingCarrierName !== 'Free Shipping'
       )
-      setSelectedShipping(realCarrierOption || shippingOpts[0])
+      const selectedOption = realCarrierOption || shippingOpts[0]
+      const shippingCost = selectedOption?.shippingRate || 0
+      
+      // Set initial totals with the auto-selected shipping
+      setOrderTotals({
+        subtotal: data.subtotal,
+        shipping: shippingCost,
+        tax: data.tax,
+        discount: data.discount + data.couponDiscount,
+        total: data.subtotal + shippingCost + data.tax - (data.discount + data.couponDiscount),
+      })
+      
+      setSelectedShipping(selectedOption)
       
       setStep('shipping')
       
@@ -249,69 +262,30 @@ export default function CheckoutPage() {
     }
   }, [items, email, shippingAddress, validateAddress, useDifferentBilling, billingAddress, couponCode])
   
-  // Track the previous shipping selection to detect user changes
-  const prevSelectedShippingRef = useRef<string | null>(null)
+  // Store the base totals (without shipping) from the initial calculation
+  // This is set in calculateOrder when we first get shipping options
+  const baseTotalsRef = useRef<{
+    subtotal: number
+    tax: number
+    discount: number
+  } | null>(null)
   
-  // Re-calculate ONLY when user explicitly selects a DIFFERENT shipping option
-  // (not on initial selection which is handled by calculateOrder)
+  // When user changes shipping option, update totals LOCALLY (no API call)
+  // This avoids the "Shipping option unavailable" error from Ecwid
   useEffect(() => {
-    const currentId = selectedShipping?.shippingMethodId ?? null
-    const prevId = prevSelectedShippingRef.current
-    
-    // Skip if this is the initial selection (prevId was null) or same selection
-    if (!prevId || currentId === prevId) {
-      prevSelectedShippingRef.current = currentId
-      return
-    }
-    
-    prevSelectedShippingRef.current = currentId
-    
-    if (selectedShipping && step === 'shipping') {
-      const recalculate = async () => {
-        setIsCalculating(true)
-        try {
-          const response = await fetch('/api/checkout/calculate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              items,
-              email,
-              shippingAddress,
-              billingAddress: useDifferentBilling ? billingAddress : undefined,
-              selectedShipping: {
-                shippingMethodId: selectedShipping.shippingMethodId,
-                shippingMethodName: selectedShipping.shippingMethodName,
-              },
-              couponCode: couponCode || undefined,
-            }),
-          })
-          
-          if (response.ok) {
-            const data = await response.json()
-            
-            // Update shipping options if available
-            if (data.availableShippingOptions?.length > 0) {
-              setShippingOptions(data.availableShippingOptions)
-            }
-            
-            setOrderTotals({
-              subtotal: data.subtotal,
-              shipping: data.shipping,
-              tax: data.tax,
-              discount: data.discount + data.couponDiscount,
-              total: data.total,
-            })
-          }
-        } catch (error) {
-          console.error('Error recalculating:', error)
-        } finally {
-          setIsCalculating(false)
-        }
-      }
+    if (selectedShipping && baseTotalsRef.current && step === 'shipping') {
+      const { subtotal, tax, discount } = baseTotalsRef.current
+      const shippingCost = selectedShipping.shippingRate || 0
       
-      recalculate()
+      setOrderTotals({
+        subtotal,
+        shipping: shippingCost,
+        tax, // Tax is already calculated on subtotal, not shipping for this store
+        discount,
+        total: subtotal + shippingCost + tax - discount,
+      })
     }
-  }, [selectedShipping, step]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedShipping, step])
   
   // Submit order
   const handleSubmitOrder = async () => {
