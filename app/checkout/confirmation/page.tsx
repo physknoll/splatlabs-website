@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { CheckCircle2, ArrowRight, Package, Mail } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Package, Mail, CreditCard } from 'lucide-react'
 import { Button } from '@/app/components/ui/Button'
 import { OrderCompletionTracker } from './OrderCompletionTracker'
 
@@ -13,16 +13,17 @@ interface ConfirmationPageProps {
   searchParams: Promise<{
     order?: string
     status?: string
+    session_id?: string  // Stripe Checkout Session ID
   }>
 }
 
 export default async function ConfirmationPage({ searchParams }: ConfirmationPageProps) {
-  const { order, status } = await searchParams
+  const { order, status, session_id } = await searchParams
   
   return (
     <main className="min-h-screen bg-white pt-24 pb-16">
       {/* Analytics tracking */}
-      <OrderCompletionTracker orderId={order} status={status} />
+      <OrderCompletionTracker orderId={order} status={status} sessionId={session_id} />
       
       <div className="container-custom">
         <div className="max-w-2xl mx-auto text-center py-12">
@@ -47,6 +48,20 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
             <h2 className="text-lg font-semibold text-content-primary mb-4">What&apos;s Next?</h2>
             
             <div className="space-y-4">
+              {session_id && (
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <CreditCard className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-content-primary">Payment Confirmed</h3>
+                    <p className="text-sm text-content-muted">
+                      Your payment has been securely processed via Stripe.
+                    </p>
+                  </div>
+                </div>
+              )}
+              
               <div className="flex gap-4">
                 <div className="w-10 h-10 bg-rock-orange/10 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Mail className="w-5 h-5 text-rock-orange" />

@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Lock, Loader2, Tag, X, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Lock, Loader2, Tag, X, CheckCircle2, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCartStore, useCartHydration } from '@/lib/stores/cart-store'
 import { formatPrice } from '@/lib/ecwid/products'
@@ -15,12 +15,32 @@ import { OrderSummary } from '@/app/components/checkout/OrderSummary'
 import { analytics } from '@/lib/analytics'
 import type { ShippingPerson, AvailableShippingOption } from '@/lib/ecwid/types'
 
+// Wrapper component to handle Suspense boundary for useSearchParams
 export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-white pt-24 pb-16">
+        <div className="container-custom flex items-center justify-center py-20">
+          <div className="w-8 h-8 border-2 border-rock-orange border-t-transparent rounded-full animate-spin" />
+        </div>
+      </main>
+    }>
+      <CheckoutContent />
+    </Suspense>
+  )
+}
+
+function CheckoutContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const isHydrated = useCartHydration()
   const items = useCartStore((state) => state.items)
   const getSubtotal = useCartStore((state) => state.getSubtotal)
   const clearCart = useCartStore((state) => state.clearCart)
+  
+  // Check for cancelled payment return
+  const wasCancelled = searchParams.get('cancelled') === 'true'
+  const cancelledOrderId = searchParams.get('order_id')
   
   // Form state
   const [email, setEmail] = useState('')
@@ -67,6 +87,26 @@ export default function CheckoutPage() {
   // Analytics tracking refs
   const hasTrackedCheckoutStart = useRef(false)
   const orderSubmittedRef = useRef(false)
+  
+  // Handle cancelled payment return - cancel the Ecwid order
+  useEffect(() => {
+    if (wasCancelled && cancelledOrderId) {
+      // Cancel the order in Ecwid
+      fetch('/api/checkout/cancel-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: parseInt(cancelledOrderId, 10),
+          reason: 'Customer cancelled on Stripe Checkout page',
+        }),
+      }).catch((error) => {
+        console.error('Failed to cancel order:', error)
+      })
+      
+      // Clear the query params after handling
+      router.replace('/checkout', { scroll: false })
+    }
+  }, [wasCancelled, cancelledOrderId, router])
   
   // Track checkout started
   useEffect(() => {
@@ -287,7 +327,7 @@ export default function CheckoutPage() {
     }
   }, [selectedShipping, step])
   
-  // Submit order
+  // Submit order - redirects to Stripe Checkout
   const handleSubmitOrder = async () => {
     if (!selectedShipping) {
       setErrors({ shipping: 'Please select a shipping method' })
@@ -298,7 +338,8 @@ export default function CheckoutPage() {
     setErrors({})
     
     try {
-      const response = await fetch('/api/checkout/create-payment-link', {
+      // Create Ecwid order and Stripe Checkout session
+      const response = await fetch('/api/checkout/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -307,6 +348,7 @@ export default function CheckoutPage() {
           shippingAddress,
           billingAddress: useDifferentBilling ? billingAddress : undefined,
           selectedShipping,
+          orderTotals,
           couponCode: couponCode || undefined,
           orderComments: orderNotes || undefined,
         }),
@@ -314,7 +356,7 @@ export default function CheckoutPage() {
       
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to create order')
+        throw new Error(errorData.error || 'Failed to create checkout session')
       }
       
       const data = await response.json()
@@ -326,15 +368,16 @@ export default function CheckoutPage() {
       analytics.trackCheckoutStep('payment', {
         order_total: orderTotals.total,
         shipping_method: selectedShipping?.shippingMethodName,
+        ecwid_order_id: data.ecwidOrderId,
       })
       
-      // Clear cart
+      // Clear cart before redirecting to Stripe
       clearCart()
       
-      // Redirect to Ecwid payment page
-      window.location.href = data.paymentUrl
+      // Redirect to Stripe Checkout page
+      window.location.href = data.checkoutUrl
     } catch (error) {
-      console.error('Error submitting order:', error)
+      console.error('Error creating checkout session:', error)
       setErrors({ general: error instanceof Error ? error.message : 'Failed to process order. Please try again.' })
       setIsSubmitting(false)
     }
@@ -426,6 +469,23 @@ export default function CheckoutPage() {
             )
           })}
         </div>
+        
+        {/* Payment Cancelled Banner */}
+        {wasCancelled && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-sm flex items-start gap-3"
+          >
+            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium">Payment was cancelled</p>
+              <p className="text-amber-700 mt-1">
+                No worries! Your order was not placed. You can review your information and try again when you&apos;re ready.
+              </p>
+            </div>
+          </motion.div>
+        )}
         
         {/* Error Banner */}
         {errors.general && (
@@ -693,7 +753,7 @@ export default function CheckoutPage() {
                   </div>
                   
                   <p className="text-xs text-content-muted text-center mt-4">
-                    You&apos;ll be redirected to our secure payment page to complete your order.
+                    You&apos;ll be redirected to Stripe&apos;s secure payment page to complete your order.
                   </p>
                 </div>
               </motion.div>
@@ -718,7 +778,7 @@ export default function CheckoutPage() {
               <div className="mt-6 p-4 bg-light-bg-subtle rounded-xl">
                 <div className="flex items-center gap-2 text-sm text-content-secondary mb-3">
                   <Lock className="w-4 h-4 text-green-600" />
-                  <span>Secure checkout powered by Ecwid</span>
+                  <span>Secure checkout powered by Stripe</span>
                 </div>
                 <div className="flex gap-4 text-xs text-content-muted">
                   <span>✓ SSL Encrypted</span>
