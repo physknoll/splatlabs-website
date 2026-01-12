@@ -142,10 +142,13 @@ export async function createOrder(params: CreateOrderParams): Promise<{
     })),
     shippingPerson: params.shippingAddress,
     billingPerson: params.billingAddress ?? params.shippingAddress,
+    // Per Ecwid docs: Don't send shippingMethodId when creating orders
+    // Just send the name, rate, and fulfillment type
     shippingOption: {
-      shippingMethodId: params.selectedShipping.shippingMethodId,
       shippingMethodName: params.selectedShipping.shippingMethodName,
+      shippingCarrierName: params.selectedShipping.shippingCarrierName,
       shippingRate: params.selectedShipping.shippingRate,
+      fulfillmentType: params.selectedShipping.fulfillmentType || 'SHIPPING',
     },
     paymentMethod: params.paymentMethod ?? 'Online Payment',
     paymentStatus: 'AWAITING_PAYMENT',

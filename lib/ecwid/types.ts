@@ -232,9 +232,14 @@ export interface ShippingPerson {
 }
 
 export interface ShippingOption {
-  shippingMethodId: string
+  shippingMethodId?: string
   shippingMethodName: string
+  shippingCarrierName?: string
   shippingRate?: number
+  fulfillmentType?: 'SHIPPING' | 'PICKUP' | 'DELIVERY'
+  estimatedTransitTime?: string
+  isPickup?: boolean
+  pickupInstruction?: string
 }
 
 export interface OrderCalculateResponse {
