@@ -134,6 +134,20 @@ export default function CheckoutPage() {
     setIsCalculating(true)
     
     try {
+      // Always send a selectedShipping - Ecwid only returns all shipping options
+      // when a selection is provided. On first call, we send a placeholder to get
+      // all available options. On subsequent calls, we send the actual selection.
+      const shippingToSend = selectedShipping 
+        ? {
+            shippingMethodId: selectedShipping.shippingMethodId,
+            shippingMethodName: selectedShipping.shippingMethodName,
+          }
+        : {
+            // Placeholder to force Ecwid to return all shipping options
+            shippingMethodId: 'CALCULATE_ALL',
+            shippingMethodName: 'Calculate All Options',
+          }
+      
       const response = await fetch('/api/checkout/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -142,10 +156,7 @@ export default function CheckoutPage() {
           email,
           shippingAddress,
           billingAddress: useDifferentBilling ? billingAddress : undefined,
-          selectedShipping: selectedShipping ? {
-            shippingMethodId: selectedShipping.shippingMethodId,
-            shippingMethodName: selectedShipping.shippingMethodName,
-          } : undefined,
+          selectedShipping: shippingToSend,
           couponCode: couponCode || undefined,
         }),
       })
@@ -215,8 +226,23 @@ export default function CheckoutPage() {
     }
   }, [items, email, shippingAddress, validateAddress, useDifferentBilling, billingAddress, couponCode])
   
-  // Re-calculate when shipping option changes
+  // Track the previous shipping selection to detect user changes
+  const prevSelectedShippingRef = useRef<string | null>(null)
+  
+  // Re-calculate ONLY when user explicitly selects a DIFFERENT shipping option
+  // (not on initial selection which is handled by calculateOrder)
   useEffect(() => {
+    const currentId = selectedShipping?.shippingMethodId ?? null
+    const prevId = prevSelectedShippingRef.current
+    
+    // Skip if this is the initial selection (prevId was null) or same selection
+    if (!prevId || currentId === prevId) {
+      prevSelectedShippingRef.current = currentId
+      return
+    }
+    
+    prevSelectedShippingRef.current = currentId
+    
     if (selectedShipping && step === 'shipping') {
       const recalculate = async () => {
         setIsCalculating(true)
@@ -239,6 +265,12 @@ export default function CheckoutPage() {
           
           if (response.ok) {
             const data = await response.json()
+            
+            // Update shipping options if available
+            if (data.availableShippingOptions?.length > 0) {
+              setShippingOptions(data.availableShippingOptions)
+            }
+            
             setOrderTotals({
               subtotal: data.subtotal,
               shipping: data.shipping,
@@ -256,7 +288,7 @@ export default function CheckoutPage() {
       
       recalculate()
     }
-  }, [selectedShipping]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedShipping, step]) // eslint-disable-line react-hooks/exhaustive-deps
   
   // Submit order
   const handleSubmitOrder = async () => {

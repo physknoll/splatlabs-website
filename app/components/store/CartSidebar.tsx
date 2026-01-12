@@ -154,9 +154,6 @@ export function CartSidebar() {
             {/* Footer - only show if cart has items */}
             {isHydrated && items.length > 0 && (
               <div className="border-t border-light-border px-6 py-4 space-y-4 bg-light-bg-subtle">
-                {/* Free Shipping Progress */}
-                <FreeShippingProgress subtotal={subtotal} threshold={100} />
-                
                 {/* Subtotal */}
                 <div className="flex items-center justify-between text-lg">
                   <span className="text-content-secondary">Subtotal</span>
@@ -197,37 +194,5 @@ export function CartSidebar() {
         </>
       )}
     </AnimatePresence>
-  )
-}
-
-// Free shipping progress component
-function FreeShippingProgress({ subtotal, threshold }: { subtotal: number; threshold: number }) {
-  const remaining = threshold - subtotal
-  const progress = Math.min((subtotal / threshold) * 100, 100)
-  
-  if (remaining <= 0) {
-    return (
-      <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-        You&apos;ve unlocked free shipping!
-      </div>
-    )
-  }
-  
-  return (
-    <div className="space-y-2">
-      <p className="text-sm text-content-secondary">
-        Add <span className="font-semibold text-rock-orange">{formatPrice(remaining)}</span> more for free shipping
-      </p>
-      <div className="h-2 bg-light-border rounded-full overflow-hidden">
-        {/* Use CSS transition instead of motion for simpler progress bars */}
-        <div
-          className="h-full bg-rock-orange rounded-full transition-all duration-300"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
   )
 }
