@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createOrder, calculateOrder } from '@/lib/ecwid/orders'
+import { createOrder } from '@/lib/ecwid/orders'
 import type { CartItem, ShippingPerson, AvailableShippingOption } from '@/lib/ecwid/types'
 
 export const dynamic = 'force-dynamic'
@@ -81,18 +81,24 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // First, re-calculate the order to get accurate totals
-    const calculatedOrder = await calculateOrder({
-      items: body.items,
-      email: body.email,
-      shippingAddress: body.shippingAddress,
-      billingAddress: body.billingAddress,
-      selectedShipping: {
-        shippingMethodId: body.selectedShipping.shippingMethodId,
-        shippingMethodName: body.selectedShipping.shippingMethodName,
-      },
-      couponCode: body.couponCode,
-    })
+    // Calculate totals locally from the cart items and selected shipping
+    // We don't call Ecwid's calculate API here because it rejects shippingMethodId
+    const subtotal = body.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    const shippingCost = body.selectedShipping.shippingRate || 0
+    
+    // Build a calculated order object for createOrder
+    // Tax will be calculated by Ecwid when creating the order
+    const calculatedOrder = {
+      subtotal,
+      shipping: shippingCost,
+      tax: 0, // Ecwid will calculate and apply tax
+      total: subtotal + shippingCost,
+      subtotalWithoutTax: subtotal,
+      totalWithoutTax: subtotal + shippingCost,
+      discount: 0,
+      couponDiscount: 0,
+      items: [], // Not needed for order creation, type requirement only
+    }
     
     // Create the order with AWAITING_PAYMENT status
     const orderResult = await createOrder({
