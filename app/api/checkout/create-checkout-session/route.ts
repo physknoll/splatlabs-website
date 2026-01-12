@@ -194,6 +194,9 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    // Use order ID as fallback if orderNumber is not returned
+    const orderIdentifier = ecwidOrder.orderNumber ?? ecwidOrder.id
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
@@ -202,10 +205,10 @@ export async function POST(request: NextRequest) {
       client_reference_id: ecwidOrder.id.toString(),
       metadata: {
         ecwid_order_id: ecwidOrder.id.toString(),
-        ecwid_order_number: ecwidOrder.orderNumber.toString(),
+        ecwid_order_number: String(orderIdentifier),
         ecwid_store_id: getStoreId(),
       },
-      success_url: `${siteUrl}/checkout/confirmation?session_id={CHECKOUT_SESSION_ID}&order=${ecwidOrder.orderNumber}`,
+      success_url: `${siteUrl}/checkout/confirmation?session_id={CHECKOUT_SESSION_ID}&order=${orderIdentifier}`,
       cancel_url: `${siteUrl}/checkout?cancelled=true&order_id=${ecwidOrder.id}`,
       // Collect billing address from Stripe
       billing_address_collection: 'auto',
