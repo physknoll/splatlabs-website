@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { analytics } from '@/lib/analytics'
+import { useHydrated } from '../ui/MotionWrapper'
 
 // Splat creation tools - shows compatibility/source platforms
 const splatSourceTools = [
@@ -44,6 +45,8 @@ const floatingParticles = [
 ]
 
 export function Hero() {
+  const hydrated = useHydrated()
+  
   return (
     <section className="relative w-full bg-hero-gradient overflow-hidden">
       {/* Animated Gradient Blobs */}
@@ -125,14 +128,14 @@ export function Hero() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 3xl:gap-28 4xl:gap-36 items-center">
           {/* Left Column - Copy */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={hydrated ? { opacity: 0, x: -30 } : false}
+            animate={hydrated ? { opacity: 1, x: 0 } : false}
             transition={{ duration: 0.8 }}
           >
 {/* Headline */}
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={hydrated ? { opacity: 0, y: 20 } : false}
+              animate={hydrated ? { opacity: 1, y: 0 } : false}
               transition={{ delay: 0.3, duration: 0.8 }}
               className="font-heading font-black text-4xl md:text-5xl lg:text-6xl xl:text-7xl 3xl:text-8xl 4xl:text-9xl tracking-tight text-content-primary mb-6 3xl:mb-8 4xl:mb-10 leading-[1.1]"
             >
@@ -189,8 +192,8 @@ export function Hero() {
 
             {/* Subheadline */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={hydrated ? { opacity: 0, y: 20 } : false}
+              animate={hydrated ? { opacity: 1, y: 0 } : false}
               transition={{ delay: 0.4, duration: 0.8 }}
               className="max-w-lg 3xl:max-w-xl 4xl:max-w-2xl text-lg md:text-xl 3xl:text-2xl 4xl:text-3xl text-content-secondary mb-8 3xl:mb-10 4xl:mb-12 leading-relaxed"
             >
@@ -200,8 +203,8 @@ export function Hero() {
 
             {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={hydrated ? { opacity: 0, y: 20 } : false}
+              animate={hydrated ? { opacity: 1, y: 0 } : false}
               transition={{ delay: 0.5, duration: 0.8 }}
               className="flex flex-col sm:flex-row items-start gap-4 3xl:gap-6 mb-6 3xl:mb-8"
             >
@@ -243,8 +246,8 @@ export function Hero() {
 
             {/* Splat Source Tools - Compatibility Badges */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={hydrated ? { opacity: 0, y: 20 } : false}
+              animate={hydrated ? { opacity: 1, y: 0 } : false}
               transition={{ delay: 0.7, duration: 0.8 }}
               className="flex flex-wrap items-center gap-3 3xl:gap-4"
             >
@@ -252,8 +255,8 @@ export function Hero() {
               {splatSourceTools.map((tool, i) => (
                 <motion.div
                   key={tool}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={hydrated ? { opacity: 0, scale: 0.9 } : false}
+                  animate={hydrated ? { opacity: 1, scale: 1 } : false}
                   transition={{ delay: 0.8 + i * 0.1 }}
                   className="feature-pill"
                 >
@@ -265,8 +268,8 @@ export function Hero() {
 
           {/* Right Column - Product Preview with Video */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={hydrated ? { opacity: 0, x: 30 } : false}
+            animate={hydrated ? { opacity: 1, x: 0 } : false}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative"
           >
@@ -348,8 +351,8 @@ export function Hero() {
 
             {/* Floating Stats Card */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={hydrated ? { opacity: 0, y: 20 } : false}
+              animate={hydrated ? { opacity: 1, y: 0 } : false}
               transition={{ delay: 1, duration: 0.6 }}
               className="absolute -bottom-6 -left-6 3xl:-bottom-8 3xl:-left-8 bg-white rounded-xl 3xl:rounded-2xl shadow-soft-lg border border-light-border p-4 3xl:p-5 4xl:p-6 hidden lg:block"
             >
@@ -368,8 +371,8 @@ export function Hero() {
 
             {/* Floating Users Card */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={hydrated ? { opacity: 0, y: -20 } : false}
+              animate={hydrated ? { opacity: 1, y: 0 } : false}
               transition={{ delay: 1.2, duration: 0.6 }}
               className="absolute -top-4 -right-4 3xl:-top-6 3xl:-right-6 bg-white rounded-xl 3xl:rounded-2xl shadow-soft-lg border border-light-border p-4 3xl:p-5 4xl:p-6 hidden lg:block"
             >

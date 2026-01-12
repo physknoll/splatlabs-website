@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import { Navbar } from './components/layout/Navbar'
 import { Footer } from './components/layout/Footer'
@@ -152,6 +153,12 @@ export default function RootLayout({
           <Footer />
           <CartSidebar />
         </Providers>
+        {/* Chat Widget */}
+        <Script
+          src="https://taskflow-backend-production-5a1c.up.railway.app/chat-widget.js"
+          data-chat-widget-id="d6584259-18a0-4ea0-be62-ebe0b6415e8f"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   )

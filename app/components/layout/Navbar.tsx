@@ -9,16 +9,20 @@ import { cn } from '@/lib/utils'
 import { NAV_ITEMS } from '@/lib/constants'
 import { Button } from '../ui/Button'
 import { CartIcon } from '../store/CartIcon'
+import { useHydrated } from '../ui/MotionWrapper'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const hydrated = useHydrated()
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
     }
+    // Check initial scroll position
+    setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -85,9 +89,9 @@ export function Navbar() {
                 <AnimatePresence>
                   {item.children && activeDropdown === item.title && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
+                      initial={hydrated ? { opacity: 0, y: 10 } : false}
+                      animate={hydrated ? { opacity: 1, y: 0 } : false}
+                      exit={hydrated ? { opacity: 0, y: 10 } : undefined}
                       transition={{ duration: 0.2 }}
                       className="absolute top-full left-0 pt-2"
                     >
@@ -164,9 +168,9 @@ export function Navbar() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={hydrated ? { opacity: 0 } : false}
+            animate={hydrated ? { opacity: 1 } : false}
+            exit={hydrated ? { opacity: 0 } : undefined}
             className="fixed inset-0 z-40 lg:hidden"
           >
             {/* Backdrop */}
@@ -177,9 +181,9 @@ export function Navbar() {
 
             {/* Menu Panel */}
             <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              initial={hydrated ? { x: '100%' } : false}
+              animate={hydrated ? { x: 0 } : false}
+              exit={hydrated ? { x: '100%' } : undefined}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white border-l border-light-border overflow-y-auto shadow-soft-xl"
             >

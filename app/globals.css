@@ -380,3 +380,32 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================
+   HYDRATION FLASH PREVENTION
+   Prevents content flicker during React hydration
+   ============================================ */
+
+/* Base visibility - content starts visible for SSR */
+.motion-safe-initial {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* After JS loads, apply proper initial states */
+html.hydrated .motion-safe-initial {
+  opacity: initial;
+  transform: initial;
+}
+
+/* Fallback: if JS takes too long, ensure content is visible */
+@keyframes ensure-visible {
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.motion-fallback {
+  animation: ensure-visible 0s 1s forwards;
+}

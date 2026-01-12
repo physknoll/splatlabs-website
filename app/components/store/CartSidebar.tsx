@@ -10,10 +10,12 @@ import { useCartStore, useCartHydration } from '@/lib/stores/cart-store'
 import { formatPrice } from '@/lib/ecwid/products'
 import { Button } from '../ui/Button'
 import { CartItem } from './CartItem'
+import { useHydrated } from '../ui/MotionWrapper'
 
 export function CartSidebar() {
   const router = useRouter()
   const isHydrated = useCartHydration()
+  const hydrated = useHydrated()
   const isOpen = useCartStore((state) => state.isOpen)
   const closeCart = useCartStore((state) => state.closeCart)
   const items = useCartStore((state) => state.items)
@@ -55,9 +57,9 @@ export function CartSidebar() {
         <>
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={hydrated ? { opacity: 0 } : false}
+            animate={hydrated ? { opacity: 1 } : false}
+            exit={hydrated ? { opacity: 0 } : undefined}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm"
             onClick={closeCart}
@@ -66,9 +68,9 @@ export function CartSidebar() {
           
           {/* Sidebar */}
           <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            initial={hydrated ? { x: '100%' } : false}
+            animate={hydrated ? { x: 0 } : false}
+            exit={hydrated ? { x: '100%' } : undefined}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className={cn(
               'fixed top-0 right-0 bottom-0 z-50',
@@ -220,10 +222,10 @@ function FreeShippingProgress({ subtotal, threshold }: { subtotal: number; thres
         Add <span className="font-semibold text-rock-orange">{formatPrice(remaining)}</span> more for free shipping
       </p>
       <div className="h-2 bg-light-border rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          className="h-full bg-rock-orange rounded-full"
+        {/* Use CSS transition instead of motion for simpler progress bars */}
+        <div
+          className="h-full bg-rock-orange rounded-full transition-all duration-300"
+          style={{ width: `${progress}%` }}
         />
       </div>
     </div>

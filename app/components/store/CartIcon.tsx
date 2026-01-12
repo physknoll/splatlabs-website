@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingCart } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCartStore, useCartItemCount } from '@/lib/stores/cart-store'
+import { useHydrated } from '../ui/MotionWrapper'
 
 interface CartIconProps {
   className?: string
@@ -12,6 +13,7 @@ interface CartIconProps {
 export function CartIcon({ className }: CartIconProps) {
   const openCart = useCartStore((state) => state.openCart)
   const itemCount = useCartItemCount()
+  const hydrated = useHydrated()
   
   return (
     <button
@@ -24,9 +26,9 @@ export function CartIcon({ className }: CartIconProps) {
     >
       <ShoppingCart className="w-5 h-5 3xl:w-6 3xl:h-6" />
       
-      {/* Badge */}
+      {/* Badge - only show after hydration to prevent flash */}
       <AnimatePresence>
-        {itemCount > 0 && (
+        {hydrated && itemCount > 0 && (
           <motion.span
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
