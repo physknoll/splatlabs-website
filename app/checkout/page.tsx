@@ -156,7 +156,30 @@ export default function CheckoutPage() {
       
       const data = await response.json()
       
-      const shippingOpts = data.availableShippingOptions || []
+      // Build the shipping options list
+      let shippingOpts: AvailableShippingOption[] = data.availableShippingOptions || []
+      
+      // If Ecwid pre-selected a shipping option that's not in the list (like "Free Shipping"),
+      // add it to the front of the list so it's available for selection
+      const preSelected = data.selectedShipping
+      if (preSelected && preSelected.shippingMethodId) {
+        const existsInList = shippingOpts.some(
+          (opt) => opt.shippingMethodId === preSelected.shippingMethodId
+        )
+        if (!existsInList) {
+          // Add the pre-selected option to the front
+          shippingOpts = [preSelected, ...shippingOpts]
+        }
+      }
+      
+      // Handle no shipping options case
+      if (shippingOpts.length === 0) {
+        console.warn('No shipping options returned from Ecwid')
+        setErrors({ general: 'No shipping options available for this address. Please check your address or try a different location.' })
+        return // Stay on address step
+      }
+      
+      // Update state atomically - set options first, then selection
       setShippingOptions(shippingOpts)
       setOrderTotals({
         subtotal: data.subtotal,
@@ -166,25 +189,15 @@ export default function CheckoutPage() {
         total: data.total,
       })
       
-      // Handle no shipping options case
-      if (shippingOpts.length === 0) {
-        console.warn('No shipping options returned from Ecwid')
-        setErrors({ general: 'No shipping options available for this address. Please check your address or try a different location.' })
-        return // Stay on address step
-      }
-      
-      // Auto-select first shipping option if none selected, or use pre-selected from Ecwid
-      if (!selectedShipping) {
-        // Prefer the one Ecwid pre-selected if available
-        const preSelected = data.selectedShipping
-        if (preSelected) {
-          const matchingOption = shippingOpts.find((opt: AvailableShippingOption) => 
-            opt.shippingMethodId === preSelected.shippingMethodId
-          )
-          setSelectedShipping(matchingOption || shippingOpts[0])
-        } else {
-          setSelectedShipping(shippingOpts[0])
-        }
+      // Auto-select shipping option
+      // If Ecwid pre-selected one, use it; otherwise use the first available
+      if (preSelected && preSelected.shippingMethodId) {
+        const matchingOption = shippingOpts.find(
+          (opt) => opt.shippingMethodId === preSelected.shippingMethodId
+        )
+        setSelectedShipping(matchingOption || shippingOpts[0])
+      } else {
+        setSelectedShipping(shippingOpts[0])
       }
       
       setStep('shipping')
@@ -200,7 +213,7 @@ export default function CheckoutPage() {
     } finally {
       setIsCalculating(false)
     }
-  }, [items, email, shippingAddress, selectedShipping, validateAddress, useDifferentBilling])
+  }, [items, email, shippingAddress, validateAddress, useDifferentBilling, billingAddress, couponCode])
   
   // Re-calculate when shipping option changes
   useEffect(() => {
