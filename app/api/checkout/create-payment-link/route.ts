@@ -123,25 +123,29 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating payment link:', error)
     
+    // Log the full error for debugging
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Full error message:', errorMessage)
+    
     if (error instanceof Error) {
       // Handle specific errors
       if (error.message.includes('400')) {
         return NextResponse.json(
-          { error: 'Invalid order data. Please check your information and try again.' },
+          { error: 'Invalid order data. Please check your information and try again.', details: errorMessage },
           { status: 400 }
         )
       }
       
       if (error.message.includes('401') || error.message.includes('403')) {
         return NextResponse.json(
-          { error: 'Authorization error. Please contact support.' },
+          { error: 'Authorization error. Please contact support.', details: errorMessage },
           { status: 500 }
         )
       }
     }
     
     return NextResponse.json(
-      { error: 'Failed to create order. Please try again.' },
+      { error: 'Failed to create order. Please try again.', details: errorMessage },
       { status: 500 }
     )
   }

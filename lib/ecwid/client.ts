@@ -112,8 +112,8 @@ export async function ecwidPost<T, B = unknown>(
   
   if (!response.ok) {
     const errorText = await response.text()
-    console.error(`Ecwid API error [${response.status}]:`, errorText)
-    throw new Error(`Ecwid API error: ${response.status} - ${response.statusText}`)
+    console.error(`Ecwid POST API error [${response.status}]:`, errorText)
+    throw new Error(`Ecwid API error: ${response.status} - ${errorText}`)
   }
   
   return response.json()

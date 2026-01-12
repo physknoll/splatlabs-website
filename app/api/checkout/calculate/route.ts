@@ -125,18 +125,22 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error calculating order:', error)
     
+    // Log the full error for debugging
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Full error message:', errorMessage)
+    
     // Check for specific Ecwid errors
     if (error instanceof Error) {
       if (error.message.includes('400')) {
         return NextResponse.json(
-          { error: 'Invalid request data. Please check cart items and address.' },
+          { error: 'Invalid request data. Please check cart items and address.', details: errorMessage },
           { status: 400 }
         )
       }
     }
     
     return NextResponse.json(
-      { error: 'Failed to calculate order totals' },
+      { error: 'Failed to calculate order totals', details: errorMessage },
       { status: 500 }
     )
   }
