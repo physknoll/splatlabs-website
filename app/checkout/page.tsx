@@ -158,34 +158,42 @@ export default function CheckoutPage() {
       let data = await response.json()
       let shippingOpts: AvailableShippingOption[] = data.availableShippingOptions || []
       
-      // ECWID QUIRK: When no selectedShipping is sent, Ecwid only returns the "default" option.
-      // We need to make a second call WITH a selectedShipping to get ALL available options.
-      // This only happens on the first calculate (when selectedShipping is null).
-      if (!selectedShipping && data.selectedShipping && shippingOpts.length <= 1) {
-        console.log('Making second API call to get all shipping options...')
+      // ECWID QUIRK: When no selectedShipping is sent, Ecwid may only return limited options.
+      // We need to make a second call WITH a REAL shipping method ID to get ALL available options.
+      // Use the first available option's ID (not the auto-selected one which may be "customShippingId").
+      if (!selectedShipping && shippingOpts.length >= 1) {
+        // Find a real shipping option with a proper ID (not "customShippingId" or similar)
+        const realOption = shippingOpts.find(opt => 
+          opt.shippingMethodId && !opt.shippingMethodId.includes('custom')
+        ) || shippingOpts[0]
         
-        const secondResponse = await fetch('/api/checkout/calculate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            items,
-            email,
-            shippingAddress,
-            billingAddress: useDifferentBilling ? billingAddress : undefined,
-            selectedShipping: {
-              shippingMethodId: data.selectedShipping.shippingMethodId || 'default',
-              shippingMethodName: data.selectedShipping.shippingMethodName,
-            },
-            couponCode: couponCode || undefined,
-          }),
-        })
-        
-        if (secondResponse.ok) {
-          const secondData = await secondResponse.json()
-          // Use the second response which has all options
-          if (secondData.availableShippingOptions?.length > shippingOpts.length) {
-            data = secondData
-            shippingOpts = data.availableShippingOptions || []
+        if (realOption) {
+          console.log('Making second API call with real shipping ID:', realOption.shippingMethodId)
+          
+          const secondResponse = await fetch('/api/checkout/calculate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              items,
+              email,
+              shippingAddress,
+              billingAddress: useDifferentBilling ? billingAddress : undefined,
+              selectedShipping: {
+                shippingMethodId: realOption.shippingMethodId,
+                shippingMethodName: realOption.shippingMethodName,
+              },
+              couponCode: couponCode || undefined,
+            }),
+          })
+          
+          if (secondResponse.ok) {
+            const secondData = await secondResponse.json()
+            // Use the second response if it has more options
+            if (secondData.availableShippingOptions?.length > shippingOpts.length) {
+              data = secondData
+              shippingOpts = data.availableShippingOptions || []
+              console.log('Second call returned', shippingOpts.length, 'shipping options')
+            }
           }
         }
       }
