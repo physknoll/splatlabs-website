@@ -174,7 +174,7 @@ function CheckoutContent() {
     setIsCalculating(true)
     
     try {
-      // First API call - may only return the "default" shipping option
+      // Single API call to get shipping options and totals
       const response = await fetch('/api/checkout/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -183,10 +183,6 @@ function CheckoutContent() {
           email,
           shippingAddress,
           billingAddress: useDifferentBilling ? billingAddress : undefined,
-          selectedShipping: selectedShipping ? {
-            shippingMethodId: selectedShipping.shippingMethodId,
-            shippingMethodName: selectedShipping.shippingMethodName,
-          } : undefined,
           couponCode: couponCode || undefined,
         }),
       })
@@ -195,61 +191,10 @@ function CheckoutContent() {
         throw new Error('Failed to calculate order')
       }
       
-      let data = await response.json()
-      let shippingOpts: AvailableShippingOption[] = data.availableShippingOptions || []
+      const data = await response.json()
       
-      // ECWID QUIRK: When no selectedShipping is sent, Ecwid may only return limited options.
-      // We need to make a second call WITH a REAL shipping method ID to get ALL available options.
-      // Use the first available option's ID (not the auto-selected one which may be "customShippingId").
-      if (!selectedShipping && shippingOpts.length >= 1) {
-        // Find a real shipping option with a proper ID (not "customShippingId" or similar)
-        const realOption = shippingOpts.find(opt => 
-          opt.shippingMethodId && !opt.shippingMethodId.includes('custom')
-        ) || shippingOpts[0]
-        
-        if (realOption) {
-          console.log('Making second API call with real shipping ID:', realOption.shippingMethodId)
-          
-          const secondResponse = await fetch('/api/checkout/calculate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              items,
-              email,
-              shippingAddress,
-              billingAddress: useDifferentBilling ? billingAddress : undefined,
-              selectedShipping: {
-                shippingMethodId: realOption.shippingMethodId,
-                shippingMethodName: realOption.shippingMethodName,
-              },
-              couponCode: couponCode || undefined,
-            }),
-          })
-          
-          if (secondResponse.ok) {
-            const secondData = await secondResponse.json()
-            // Use the second response if it has more options
-            if (secondData.availableShippingOptions?.length > shippingOpts.length) {
-              data = secondData
-              shippingOpts = data.availableShippingOptions || []
-              console.log('Second call returned', shippingOpts.length, 'shipping options')
-            }
-          }
-        }
-      }
-      
-      // If Ecwid pre-selected a shipping option that's not in the list,
-      // add it to the front so it's available for selection
-      const preSelected = data.selectedShipping
-      if (preSelected && preSelected.shippingMethodName) {
-        const existsInList = shippingOpts.some(
-          (opt) => opt.shippingMethodId === preSelected.shippingMethodId ||
-                   opt.shippingMethodName === preSelected.shippingMethodName
-        )
-        if (!existsInList) {
-          shippingOpts = [preSelected, ...shippingOpts]
-        }
-      }
+      // Use the available shipping options directly from the response
+      const shippingOpts: AvailableShippingOption[] = data.availableShippingOptions || []
       
       // Handle no shipping options case
       if (shippingOpts.length === 0) {
@@ -258,25 +203,35 @@ function CheckoutContent() {
         return // Stay on address step
       }
       
-      // Update state
+      // Update state with available shipping options
       setShippingOptions(shippingOpts)
       
       // Store base totals for local shipping recalculations
-      // (we don't include shipping here - it gets added based on selection)
       baseTotalsRef.current = {
         subtotal: data.subtotal,
         tax: data.tax,
         discount: data.discount + data.couponDiscount,
       }
       
-      // Auto-select the first real carrier option (not "Free Shipping" if there are others)
-      const realCarrierOption = shippingOpts.find(opt => 
-        opt.shippingCarrierName && opt.shippingCarrierName !== 'Free Shipping'
-      )
-      const selectedOption = realCarrierOption || shippingOpts[0]
+      // Use the selectedShipping from the response as the default selected option
+      // This is what Ecwid returns as the pre-selected default
+      const defaultSelected = data.selectedShipping
+      
+      // Find matching option in the list, or fall back to first option
+      let selectedOption: AvailableShippingOption | null = null
+      if (defaultSelected) {
+        selectedOption = shippingOpts.find(
+          opt => opt.shippingMethodId === defaultSelected.shippingMethodId
+        ) || null
+      }
+      // If no match found, use the first available option
+      if (!selectedOption && shippingOpts.length > 0) {
+        selectedOption = shippingOpts[0]
+      }
+      
       const shippingCost = selectedOption?.shippingRate || 0
       
-      // Set initial totals with the auto-selected shipping
+      // Set initial totals with the selected shipping
       setOrderTotals({
         subtotal: data.subtotal,
         shipping: shippingCost,

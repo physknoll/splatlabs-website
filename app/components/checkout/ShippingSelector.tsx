@@ -74,13 +74,9 @@ export function ShippingSelector({
       }
     })
     
-    // Sort groups: carriers with selected option first, then by lowest price
-    return Object.values(groups).sort((a, b) => {
-      if (a.hasSelectedOption && !b.hasSelectedOption) return -1
-      if (!a.hasSelectedOption && b.hasSelectedOption) return 1
-      return a.lowestPrice - b.lowestPrice
-    })
-  }, [options, selectedId])
+    // Sort groups by lowest price only - don't reorder based on selection
+    return Object.values(groups).sort((a, b) => a.lowestPrice - b.lowestPrice)
+  }, [options])
   
   // Track which carrier groups are expanded
   const [expandedCarriers, setExpandedCarriers] = useState<Set<string>>(() => {
