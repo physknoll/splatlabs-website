@@ -1,9 +1,12 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Check, Gift, ArrowRight, MessageCircle } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { SectionHeader } from '../ui/SectionHeader'
+import { useCartStore } from '@/lib/stores/cart-store'
+import type { CartItem } from '@/lib/ecwid/types'
 
 const packages = [
   {
@@ -18,6 +21,10 @@ const packages = [
       '1-year Splat Labs Starter Plan',
     ],
     highlighted: false,
+    // Ecwid product data
+    ecwidProductId: 807648544,
+    ecwidSku: '080777',
+    ecwidPrice: 4999,
   },
   {
     name: 'PortalCam Premium Package',
@@ -32,6 +39,10 @@ const packages = [
     ],
     highlighted: true,
     badge: 'Most Popular',
+    // Ecwid product data
+    ecwidProductId: 807596977,
+    ecwidSku: '10618',
+    ecwidPrice: 6499,
   },
 ]
 
@@ -46,6 +57,27 @@ const starterPlanFeatures = [
 ]
 
 export function PortalCamPricing() {
+  const router = useRouter()
+  const addItem = useCartStore((state) => state.addItem)
+
+  const handleBuyNow = (pkg: typeof packages[0]) => {
+    // Create cart item from package data
+    const cartItem: CartItem = {
+      productId: pkg.ecwidProductId,
+      name: pkg.name,
+      sku: pkg.ecwidSku,
+      price: pkg.ecwidPrice,
+      quantity: 1,
+      isShippingRequired: true,
+    }
+
+    // Add to cart
+    addItem(cartItem)
+
+    // Navigate to checkout
+    router.push('/checkout')
+  }
+
   return (
     <section className="section-padding bg-white relative overflow-hidden">
       {/* Background Decoration */}
@@ -152,6 +184,7 @@ export function PortalCamPricing() {
                   size="lg"
                   className="w-full"
                   rightIcon={<ArrowRight className="w-5 h-5" />}
+                  onClick={() => handleBuyNow(pkg)}
                 >
                   Buy Now
                 </Button>
