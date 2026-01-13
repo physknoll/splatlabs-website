@@ -110,15 +110,17 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/logo/SplatLabs_Logo.svg', type: 'image/svg+xml' },
+      { url: '/logo/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/logo/icon-192.png', sizes: '192x192', type: 'image/png' },
       { url: '/logo/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
       { url: '/logo/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
     ],
+    shortcut: '/logo/favicon-32x32.png',
     apple: [{ url: '/logo/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
     other: [
       {
         rel: 'mask-icon',
-        url: '/logo/SplatLabs_Logo.svg',
+        url: '/logo/icon-512.png',
         color: '#FF5F1F',
       },
     ],

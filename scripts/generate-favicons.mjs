@@ -6,37 +6,42 @@ import pngToIco from 'png-to-ico';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, '..', 'public');
+const logoDir = join(publicDir, 'logo');
+const appDir = join(__dirname, '..', 'app');
 
-// Read the SVG
-const svgBuffer = readFileSync(join(publicDir, 'favicon.svg'));
+// Read the source icon PNG (512x512)
+const iconBuffer = readFileSync(join(logoDir, 'icon-512.png'));
 
 async function generateFavicons() {
-  console.log('Generating favicon variants...');
+  console.log('Generating favicon variants from icon-512.png...');
 
-  // Generate PNG variants
+  // Generate PNG variants in logo directory
   const sizes = [
     { name: 'favicon-16x16.png', size: 16 },
     { name: 'favicon-32x32.png', size: 32 },
     { name: 'apple-touch-icon.png', size: 180 },
-    { name: 'android-chrome-192x192.png', size: 192 },
-    { name: 'android-chrome-512x512.png', size: 512 },
+    { name: 'icon-192.png', size: 192 },
   ];
 
   for (const { name, size } of sizes) {
-    await sharp(svgBuffer)
+    await sharp(iconBuffer)
       .resize(size, size)
       .png()
-      .toFile(join(publicDir, name));
-    console.log(`  ✓ ${name}`);
+      .toFile(join(logoDir, name));
+    console.log(`  ✓ logo/${name}`);
   }
 
-  // Generate ICO file (contains 16x16 and 32x32)
-  const png16 = await sharp(svgBuffer).resize(16, 16).png().toBuffer();
-  const png32 = await sharp(svgBuffer).resize(32, 32).png().toBuffer();
+  // Generate ICO file (contains 16x16 and 32x32) - place in app directory for Next.js
+  const png16 = await sharp(iconBuffer).resize(16, 16).png().toBuffer();
+  const png32 = await sharp(iconBuffer).resize(32, 32).png().toBuffer();
   
   const icoBuffer = await pngToIco([png16, png32]);
+  // Place favicon.ico in app directory for Next.js 13+ automatic handling
+  writeFileSync(join(appDir, 'favicon.ico'), icoBuffer);
+  console.log('  ✓ app/favicon.ico');
+  // Also place in public for legacy support
   writeFileSync(join(publicDir, 'favicon.ico'), icoBuffer);
-  console.log('  ✓ favicon.ico');
+  console.log('  ✓ public/favicon.ico');
 
   // Generate OG image (1200x630)
   const ogSvg = `
